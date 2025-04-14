@@ -3,12 +3,8 @@ name: Deploy Angular App to AWS S3
 on:
   push:
     branches: [main]
-    paths:
-      - 'skillmatch/**'
   pull_request:
     branches: [main]
-    paths:
-      - 'skillmatch/**'
   workflow_dispatch:
 
 jobs:
