@@ -13,7 +13,7 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class LandingComponent {
   contactForm: FormGroup;
-  isModalOpen: boolean = true; // Modal is open by default
+  isModalOpen: boolean = true; 
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.contactForm = this.fb.group({
@@ -28,7 +28,7 @@ export class LandingComponent {
   onSubmit() {
     if (this.contactForm.valid) {
       console.log(this.contactForm.value);
-      // Handle form submission here
+
     }
   }
 

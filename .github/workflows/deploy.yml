@@ -35,13 +35,6 @@ jobs:
         env:
           NODE_OPTIONS: --max_old_space_size=4096
 
-      - name: Debug build output
-        run: |
-          ls -la dist/ || echo "dist/ not found"
-          ls -la dist/skillmatch/ || echo "dist/skillmatch/ not found"
-          ls -la dist/skillmatch/browser/ || echo "No browser folder"
-          find dist -type f || echo "No files in dist"
-
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -58,10 +51,6 @@ jobs:
         with:
           name: skillmatch-dist
           path: dist/skillmatch/
-
-      - name: Debug artifact contents
-        run: |
-          ls -la dist/skillmatch/
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
