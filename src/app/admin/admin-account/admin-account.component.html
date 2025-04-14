@@ -1,0 +1,21 @@
+    <div class="w-full h-full">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full h-full rounded-md bg-[#f0f0f0] flex flex-col justify-center items-center p-10 gap-2">
+                <h3 class="lg:hidden text-[#000d1c] font-bold text-2xl">Login</h3>
+                <!-- Email -->
+                <div class="flex flex-col">
+                    <input type="password" id="password" formControlName="password" class="border-1 border-[#ff4900] w-[50vw] h-[8vw] lg:w-[25vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Password">
+                    <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors" class="text-red-500">
+                      <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</span>
+                    </div>
+                </div>
+                
+                <!-- Password -->
+            <div class="flex flex-col">
+                <input type="confirmPassword" id="confirmPassword" name="confirmPassword" formControlName="confirmPassword" required class="border-1 border-[#ff4900] w-[50vw] h-[8vw] lg:w-[25vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Confirm Password">
+                <div class="text-red-500">
+                    <span *ngIf="loginForm.get('confirmPassword')?.errors?.['required'] && loginForm.get('confirmPassword')?.touched">Password is required.</span>
+                  </div>
+            </div>  
+            <button type="submit" class="primary-btn mt-10">Update</button>
+            </form>
+    </div>

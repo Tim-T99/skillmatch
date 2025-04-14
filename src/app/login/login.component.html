@@ -1,0 +1,32 @@
+<main class="bg-[#f0f0f0] flex w-screen h-screen m-0 p-0">
+    <div class="hidden lg:flex h-screen lg:bg-[#000d1c] p-[5rem] lg:flex-col justify-center items-center lg:w-[50%] gap-5">    <img src="./assets/skillmatch_l.svg" alt="brand" class="w-2/3">
+    <p class="text-[2rem] font-bold">Welcome back!</p>
+    </div>
+    <div class="bg-[#000d1c] w-full lg:bg-[#f0f0f0] lg:w-[50%] flex flex-col justify-center items-center p-10 gap-2 rounded-md">
+        <img src="./assets/skillmatch_l.svg" alt="brand" class="w-2/3 lg:hidden py-5">
+        <img src="./assets/logo.svg" alt="logo" class="hidden lg:flex w-20">
+        <h3 class="hidden lg:flex lg:text-[#000d1c] font-bold text-4xl">Login</h3>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="rounded-md bg-[#f0f0f0] flex flex-col justify-center items-center p-10 gap-2">
+            <h3 class="lg:hidden text-[#000d1c] font-bold text-2xl">Login</h3>
+            <!-- Email -->
+            <div class="flex flex-col">
+                <label for="email">Email</label>
+                <input type="email" id="email" formControlName="email" class="border-1 border-[#ff4900] w-[50vw] h-[8vw] lg:w-[25vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Email">
+                <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors" class="text-red-500">
+                  <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</span>
+                  <span *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</span>
+                </div>
+            </div>
+            
+            <!-- Password -->
+        <div class="flex flex-col">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" formControlName="password" required class="border-1 border-[#ff4900] w-[50vw] h-[8vw] lg:w-[25vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Password">
+            <div class="text-red-500">
+                <span *ngIf="loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched">Password is required.</span>
+              </div>
+        </div>  
+        <button type="submit" class="primary-btn mt-10">Login</button>
+        </form>
+    </div>
+</main>

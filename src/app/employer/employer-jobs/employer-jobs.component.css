@@ -1,0 +1,29 @@
+@media (max-width: 640px) {
+    .job-position::before {
+      content: 'Position:';
+    }
+    .job-status::before {
+      content: 'Status:';
+    }
+    .job-applicants::before {
+      content: 'Applicants:';
+    }
+    .job-interviews::before {
+      content: 'Interviews:';
+    }
+    .job-actions::before {
+      content: 'Actions:';
+    }
+    .interview-role::before {
+      content: 'Role:';
+    }
+    .interview-applicant::before {
+      content: 'Applicant:';
+    }
+    .interview-date::before {
+      content: 'Date:';
+    }
+    .interview-actions::before {
+      content: 'Actions:';
+    }
+  }
