@@ -1,0 +1,82 @@
+name: Deploy Angular App to AWS S3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skillmatch/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'skillmatch/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: skillmatch
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('skillmatch/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular app
+        run: npm run build -- --configuration production
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+
+      - name: Debug build output
+        run: |
+          ls -la dist/skillmatch/
+          ls -la dist/skillmatch/browser/ || echo "No browser folder"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: skillmatch-dist
+          path: skillmatch/dist/skillmatch/
+          retention-days: 1
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: skillmatch-dist
+          path: dist/skillmatch/
+
+      - name: Debug artifact contents
+        run: |
+          ls -la dist/skillmatch/
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync dist/skillmatch/browser/ s3://${{ secrets.AWS_S3_BUCKET }}/ --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
