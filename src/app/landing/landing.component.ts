@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-landing',
@@ -13,8 +13,9 @@ import { RouterModule } from '@angular/router';
 })
 export class LandingComponent {
   contactForm: FormGroup;
+  isModalOpen: boolean = true; // Modal is open by default
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.contactForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -29,5 +30,9 @@ export class LandingComponent {
       console.log(this.contactForm.value);
       // Handle form submission here
     }
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
   }
 }
