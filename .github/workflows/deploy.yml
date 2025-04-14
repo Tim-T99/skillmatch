@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('skillmatch/package-lock.json') }}
+          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
 
@@ -41,14 +41,16 @@ jobs:
 
       - name: Debug build output
         run: |
-          ls -la dist/skillmatch/
+          ls -la dist/ || echo "dist/ not found"
+          ls -la dist/skillmatch/ || echo "dist/skillmatch/ not found"
           ls -la dist/skillmatch/browser/ || echo "No browser folder"
+          find dist -type f || echo "No files in dist"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: skillmatch-dist
-          path: skillmatch/dist/skillmatch/
+          path: dist/skillmatch/
           retention-days: 1
 
   deploy:
@@ -74,6 +76,6 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync dist/skillmatch/browser/ s3://${{ secrets.AWS_S3_BUCKET }}/ --delete
+          aws s3 sync dist/skillmatch/ s3://${{ secrets.AWS_S3_BUCKET }}/ --delete
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
