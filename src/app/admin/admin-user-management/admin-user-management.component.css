@@ -1,0 +1,14 @@
+  @media (max-width: 640px) {
+    .user-name::before {
+      content: 'Name:';
+    }
+    .user-role::before {
+      content: 'Role:';
+    }
+    .user-status::before {
+      content: 'Status:';
+    }
+    .user-actions::before {
+      content: 'Actions:';
+    }
+  }
