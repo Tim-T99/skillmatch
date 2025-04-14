@@ -14,9 +14,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: skillmatch
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
