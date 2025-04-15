@@ -40,7 +40,7 @@ jobs:
         with:
           name: skillmatch-dist
           path: dist/skillmatch/
-          retention-days: 1
+          retention-days: 7
 
   deploy:
     runs-on: ubuntu-latest
