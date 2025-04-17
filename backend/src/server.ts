@@ -19,9 +19,16 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(cors({
-  origin: "http://localhost:4200", // Adjust if your frontend port differs
+  origin: [
+    "http://localhost:4200",
+    "http://skillmatch25.s3-website.eu-north-1.amazonaws.com"
+  ],
   methods: ["GET", "PUT", "DELETE", "POST"],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
