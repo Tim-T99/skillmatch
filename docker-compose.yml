@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   frontend:
     build:
@@ -17,7 +18,12 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgres://user:password@db:5432/skillmatch
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=skillmatch
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - ALLOWED_ORIGINS=http://localhost:4200,http://skillmatch25.s3-website.eu-north-1.amazonaws.com
     depends_on:
       - db
     networks:

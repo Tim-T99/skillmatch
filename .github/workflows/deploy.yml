@@ -145,6 +145,7 @@ jobs:
               -e DB_NAME=postgres \
               -e DB_USER=sa \
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e ALLOWED_ORIGINS=http://skillmatch25.s3-website.eu-north-1.amazonaws.com \
               --restart unless-stopped \
               ${{ secrets.DOCKERHUB_USERNAME }}/skillmatch-backend:latest
             echo "Deployment completed"
