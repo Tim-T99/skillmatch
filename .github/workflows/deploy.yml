@@ -116,21 +116,26 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-north-1
 
+      - name: Test SSH connectivity
+        run: |
+          echo "Attempting to ping ${EC2_HOST}"
+          ping -c 4 ${{ secrets.EC2_HOST }} || echo "Ping failed"
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          timeout: 60s
+          command_timeout: 60s
           script: |
-            # Pull the latest Docker image
+            echo "Connected to EC2"
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/skillmatch-backend:latest
-
-            # Stop the running container if it exists
             docker stop skillmatch-backend || true
             docker rm skillmatch-backend || true
-
-            # Run the new container
             docker run -d \
               --name skillmatch-backend \
               -p 3000:3000 \
@@ -141,3 +146,6 @@ jobs:
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               --restart unless-stopped \
               ${{ secrets.DOCKERHUB_USERNAME }}/skillmatch-backend:latest
+            echo "Deployment completed"
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
