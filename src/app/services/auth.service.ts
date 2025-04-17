@@ -76,7 +76,7 @@ export class AuthService {
       password,
       cv
     };
-    return this.http.post<SeekerSignupResponse>(`${this.apiUrl}/auth/register/seeker`, body).pipe(
+    return this.http.post<SeekerSignupResponse>(`${this.apiUrl}/register/seeker`, body).pipe(
       tap(response => {
         this.currentUser = {
           role_id: response.user.role_id,
