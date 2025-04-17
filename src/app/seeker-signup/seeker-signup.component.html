@@ -95,22 +95,30 @@
                         <span *ngIf="skill.errors?.['required']">Skill is required.</span>
                       </div>
                     </div>
-                    <button type="button" (click)="addSkill()" class="primary-btn">Add Skill</button>
+                    <button type="button" (click)="addSkill()" class="primary-btn mt-5">Add Skill</button>
                 </div>
               </div>
+              <div class="flex flex-row w-full justify-between">
+                <div>
+                    <input type="text" id="cv" formControlName="cv" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="CV link">
+                    <div *ngIf="signupForm.get('cv')?.touched && signupForm.get('cv')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('cv')?.errors?.['required']">CV is required.</span>
+                    </div>
+                </div>
+            </div>
 
             <!-- Security --> 
             <h4 class="text-[#000d1c] font-bold">Security</h4>
             <div class="flex flex-row w-full justify-between">
                 <div>
-                    <input type="text" id="password" formControlName="password" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Password">
+                    <input type="password" id="password" formControlName="password" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Password">
                     <div *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.errors" class="text-red-500">
                         <span *ngIf="signupForm.get('password')?.errors?.['required']">Password is required.</span>
                         <span *ngIf="signupForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters.</span>
                     </div>
                 </div>
                 <div>
-                    <input type="text" id="confirmPassword" formControlName="confirmPassword" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Confirm Password">
+                    <input type="password" id="confirmPassword" formControlName="confirmPassword" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Confirm Password">
                     <div *ngIf="signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.errors" class="text-red-500">
                         <span *ngIf="signupForm.hasError('passwordMismatch') && signupForm.get('confirmPassword')?.touched" class="text-red-500">Passwords do not match</span>
                     </div>

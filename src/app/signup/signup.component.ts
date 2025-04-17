@@ -1,77 +1,79 @@
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms'
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { passwordMatcher } from '../validators/password-matcher.validator';
-import { AuthService } from '../services/auth.service';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
-
   private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
-  private authService = inject(AuthService)
-  private router = inject(Router)
-  private existingUsernames = ['john_doe', 'jane_smith', 'admin', 'librarian'];
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   signupForm = this.fb.group({
-    firstName: ['', [Validators.required]],
-    secondName: ['', [Validators.required]],
+    firstName: ['', Validators.required],
+    secondName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    telephone1: ['', [Validators.required]],
-    telephone2: ['', [Validators.required]],
-    address: ['', [Validators.required]],
-    postalCode: ['', [Validators.required]],
-    companyName: ['', [Validators.required]],
-    companyAddress: ['', [Validators.required]],
-    companyPostalCode: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]],
-  },
-  {validators: passwordMatcher('password', 'confirmPassword')}
-);
+    telephone1: [''],
+    telephone2: [''],
+    address: [''],
+    postalCode: [''],
+    companyName: ['', Validators.required],
+    companyAddress: [''],
+    companyPostalCode: ['']
+  });
 
-onSubmit(){
-  this.router.navigate(['/employer'])
-//   if (this.signupForm.valid) {
-//     const formData = this.signupForm.value;
-    
-//     const firstName = formData.firstName as string;
-//     const secondName = formData.firstName as string;
-//     const email = formData.email as string;
-//     const telephone1 = formData.firstName as string;
-//     const telephone2 = formData.firstName as string;
-//     const address = formData.firstName as string;
-//     const postalCode = formData.firstName as string;
-//     const companyName = formData.firstName as string;
-//     const companyAddress = formData.firstName as string;
-//     const companyPostalCode = formData.firstName as string;
-//     const password = formData.password as string;
+  errorMessage: string | null = null;
 
-//     this.authService.signup(firstName, secondName, email, telephone1, telephone2, address, postalCode, companyName, companyAddress, companyPostalCode, password).subscribe({
-//       next: () => {
-//         window.alert('Data submitted!');
-//         this.signupForm.reset()
-//         this.router.navigate(['/home']);
-//       },
-//       error: (error) => {console.error('Error saving data:', error)
-//         if (error.status === 400 && error.error.message === 'User already exists') {
-//           window.alert('User already exists.');
-//           this.signupForm.reset()
-//         } else {
-//           window.alert('An error occurred. Please try again later.');
-//         }
-//       }
-//     });
-//   } else {
-//     window.alert('Please fill all fields')
-//   }
-}
+  onSubmit() {
+    if (this.signupForm.valid) {
+      const {
+        firstName,
+        secondName,
+        email,
+        password,
+        telephone1,
+        telephone2,
+        address,
+        postalCode,
+        companyName,
+        companyAddress,
+        companyPostalCode
+      } = this.signupForm.value;
+
+      this.authService
+        .signup(
+          firstName!,
+          secondName!,
+          email!,
+          telephone1 || '',
+          telephone2 || '',
+          address || '',
+          postalCode || '',
+          companyName!,
+          companyAddress || '',
+          companyPostalCode || '',
+          password!
+        )
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/employer/employerDash']);
+            this.signupForm.reset();
+          },
+          error: (error) => {
+            this.errorMessage = error.status === 400 ? error.error.message : 'An error occurred.';
+            console.error('Signup error:', error);
+          }
+        });
+    } else {
+      this.errorMessage = 'Please fill all required fields.';
+    }
+  }
 }

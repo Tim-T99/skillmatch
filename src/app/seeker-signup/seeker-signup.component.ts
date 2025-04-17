@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core'; // Add OnInit
-import { FormArray, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { passwordMatcher } from '../validators/password-matcher.validator';
@@ -9,38 +8,42 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-seeker-signup',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './seeker-signup.component.html',
-  styleUrls: ['./seeker-signup.component.css'] // Fix styleUrl to styleUrls (array)
+  styleUrls: ['./seeker-signup.component.css']
 })
-export class SeekerSignupComponent implements OnInit { // Implement OnInit
+export class SeekerSignupComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
   private authService = inject(AuthService);
   private router = inject(Router);
-  private existingUsernames = ['john_doe', 'jane_smith', 'admin', 'librarian'];
 
-  signupForm = this.fb.group({
-    firstName: ['', [Validators.required]],
-    secondName: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    telephone1: ['', [Validators.required]],
-    telephone2: ['', [Validators.required]],
-    address: ['', [Validators.required]],
-    postalCode: ['', [Validators.required]],
-    edLevel: ['', [Validators.required]],
-    institution: ['', [Validators.required]],
-    skills: this.fb.array([]),
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required]],
-  }, { validators: passwordMatcher('password', 'confirmPassword') });
+  signupForm = this.fb.group(
+    {
+      firstName: ['', Validators.required],
+      secondName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      telephone1: [''],
+      telephone2: [''],
+      address: [''],
+      postalCode: [''],
+      edLevel: ['', Validators.required],
+      institution: ['', Validators.required],
+      cv: ['', [Validators.pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/)]], // Optional URL
+      skills: this.fb.array([]),
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', Validators.required]
+    },
+    { validators: passwordMatcher('password', 'confirmPassword') }
+  );
+
+  errorMessage: string | null = null;
 
   get skills(): FormArray<FormControl> {
     return this.signupForm.get('skills') as FormArray<FormControl>;
   }
 
   ngOnInit() {
-    this.addSkill(); // Add one skill input by default
+    this.addSkill();
   }
 
   addSkill() {
@@ -52,41 +55,51 @@ export class SeekerSignupComponent implements OnInit { // Implement OnInit
   }
 
   onSubmit() {
-    this.router.navigate(['/seeker'])
-  //   if (this.signupForm.valid) {
-  //     const formData = this.signupForm.value;
+    if (this.signupForm.valid) {
+      this.errorMessage = null;
+      const {
+        firstName,
+        secondName,
+        email,
+        telephone1,
+        telephone2,
+        address,
+        postalCode,
+        edLevel,
+        institution,
+        cv,
+        skills,
+        password
+      } = this.signupForm.value;
 
-  //     const firstName = formData.firstName as string;
-  //     const secondName = formData.secondName as string; // Fix: was firstName
-  //     const email = formData.email as string;
-  //     const telephone1 = formData.telephone1 as string; // Fix: was firstName
-  //     const telephone2 = formData.telephone2 as string; // Fix: was firstName
-  //     const address = formData.address as string; // Fix: was firstName
-  //     const postalCode = formData.postalCode as string; // Fix: was firstName
-  //     const edLevel = formData.edLevel as string; // Fix: was firstName
-  //     const institution = formData.institution as string; // Fix: was firstName
-  //     const skills = formData.skills as string[];
-  //     const password = formData.password as string;
-
-  //     this.authService.signup(firstName, secondName, email, telephone1, telephone2, address, postalCode, companyName, companyAddress, skills, password).subscribe({
-  //       next: () => {
-  //         window.alert('Data submitted!');
-  //         this.signupForm.reset();
-  //         this.router.navigate(['/home']);
-  //       },
-  //       error: (error) => {
-  //         console.error('Error saving data:', error);
-  //         if (error.status === 400 && error.error.message === 'User already exists') {
-  //           window.alert('User already exists.');
-  //           this.signupForm.reset();
-  //         } else {
-  //           window.alert('An error occurred. Please try again later.');
-  //         }
-  //       }
-  //     });
-  //     */
-  //   } else {
-  //     window.alert('Please fill all fields');
-  //   }
+      this.authService
+        .signupSeeker(
+          firstName!,
+          secondName!,
+          email!,
+          telephone1 || '',
+          telephone2 || '',
+          address || '',
+          postalCode || '',
+          edLevel!,
+          institution!,
+          skills as string[],
+          password!,
+          cv || ''
+        )
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/seeker/seekerDash']);
+            this.signupForm.reset();
+          },
+          error: (error) => {
+            console.error('Signup error:', error);
+            this.errorMessage =
+              error.status === 400 ? error.error.message : 'An error occurred. Please try again later.';
+          }
+        });
+    } else {
+      this.errorMessage = 'Please fill all required fields correctly.';
+    }
   }
 }

@@ -1,55 +1,68 @@
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms'
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { LoginResponse } from '../models/auth.model';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-
-
   private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
-  private authService = inject(AuthService)
-  private router = inject(Router)
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
-  },
-);
+    password: ['', Validators.required]
+  });
 
-  onSubmit(){
-    this.router.navigate(['/admin']);
-    // if (this.loginForm.valid) {
-    //   const formData = this.loginForm.value;
-  
-    //   const email = formData.email as string;
-    //   const password = formData.password as string;
-  
-    //   this.authService.login( email, password).subscribe({
-    //     next: () => {
-    //       this.loginForm.reset()
-    //       this.router.navigate(['/home']);
-    //     },
-    //     error: (error) => {console.error('Error saving data:', error)
+  errorMessage: string | null = null;
 
-    //       if (error.status === 401 && error.error.message === 'Invalid email or password') {
-    //         window.alert('Invalid email or password');
-    //         this.loginForm.reset()
-    //       } else {
-    //         window.alert('An error occurred. Please try again later.');
-    //       }
-    //     }
-    //   });
-    // } else {
-    //   console.log('Form is invalid');
-    // }
+  onSubmit() {
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
+      this.errorMessage = null;
+      this.authService.login(email!, password!).subscribe({
+        next: (response: LoginResponse) => {
+          const roleId = response.user.role_id;
+          this.navigateByRole(roleId);
+          this.loginForm.reset();
+        },
+        error: (error) => {
+          console.error('Login error:', error);
+          this.errorMessage =
+            error.status === 401
+              ? 'Invalid email or password.'
+              : error.status === 400
+              ? error.error.message
+              : 'An error occurred. Please try again later.';
+        }
+      });
+    } else {
+      this.errorMessage = 'Please fill all required fields.';
+    }
+  }
+
+  private navigateByRole(roleId: number) {
+    switch (roleId) {
+      case 1:
+        this.router.navigate(['/admin/adminDash']);
+        break;
+      case 2:
+        this.router.navigate(['/employer/employerDash']);
+        break;
+      case 3:
+        this.router.navigate(['/seeker/seekerDash']);
+        break;
+      default:
+        this.errorMessage = 'Invalid role. Please contact support.';
+        console.error('Unknown role_id:', roleId);
+    }
   }
 }
