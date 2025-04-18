@@ -188,10 +188,23 @@ export const createSeeker = asyncHandler(async (req: Request, res: Response, nex
     } = req.body;
 
     // Validate required fields
-    if (!first_name || !second_name || !email || !password || !education_level || !institution) {
-      res.status(400).json({ message: 'Missing required fields' });
-      return;
-    }
+    const missingFields = [];
+
+if (!first_name) missingFields.push('first_name');
+if (!second_name) missingFields.push('second_name');
+if (!email) missingFields.push('email');
+if (!password) missingFields.push('password');
+if (!education_level) missingFields.push('education_level');
+if (!institution) missingFields.push('institution');
+
+if (missingFields.length > 0) {
+  res.status(400).json({ 
+    message: 'Missing required fields', 
+    missing: missingFields 
+  });
+  return;
+}
+
 
     // Validate cv as URL if provided
     if (cv && !isValidUrl(cv)) {
