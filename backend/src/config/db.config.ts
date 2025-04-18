@@ -1,28 +1,27 @@
 import { Pool } from 'pg';
-import dotenv from 'dotenv';
 
+const requiredEnvVars = ['DB_USER', 'DB_HOST', 'DB_NAME', 'DB_PASSWORD', 'DB_PORT'];
 
-dotenv.config();
-
-
-const pool = new Pool({
-  host: 'database-1.clasacgwqr7b.eu-north-1.rds.amazonaws.com',
-  port: Number(process.env['DB_PORT']), 
-  user: process.env['DB_USER'],
-  password: process.env['DB_PASSWORD'],
-  database: process.env['DB_NAME'],
-  ssl: {
-    rejectUnauthorized: false // For development only; use proper SSL in production
+requiredEnvVars.forEach((envVar) => {
+  if (!process.env[envVar]) {
+    throw new Error(`Missing required environment variable: ${envVar}`);
   }
 });
 
-// Test the connection (optional but recommended)
-pool.connect((err, client, release) => {
-  if (err) {
-    return console.error('Error acquiring client', err.stack);
-  }
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT || '5432', 10),
+});
+
+pool.on('connect', () => {
   console.log('Connected to PostgreSQL database successfully');
-  release(); // Release the client back to the pool
+});
+
+pool.on('error', (err) => {
+  console.error('Database pool error:', err.stack);
 });
 
 export default pool;
