@@ -7,7 +7,7 @@ import { LoginResponse, SignupResponse, SeekerSignupResponse } from '../models/a
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://51.21.149.137:3000/api';
+  private apiUrl = 'database-1.clasacgwqr7b.eu-north-1.rds.amazonaws.com';
   private currentUser: { role_id: number; name?: string } | null = null;
 
   constructor(private http: HttpClient) {}
