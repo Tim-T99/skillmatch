@@ -6,6 +6,10 @@ import { updateUser } from '../controllers/userController'
 
 const router = express.Router()
 
+router.get('/', (req, res) => {
+  res.send('Auth route');
+});
+
 //public routes 
 router.post("/register/admin", createUser)
 router.post('/register', createEmployer);

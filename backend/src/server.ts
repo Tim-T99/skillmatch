@@ -1,17 +1,11 @@
-import { setupAliases } from "import-aliases";
-setupAliases()
 import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { readFileSync } from 'fs';
-
 import cors from 'cors';
 import pool from './config/db.config';
-import authRoutes from '@app/routes/authRoutes'
-import usersRoutes from '@app/routes/usersRoute'
-import booksRoutes from '@app/routes/booksRoute'
-import borrowersRoutes from '@app/routes/borrowersRoute'
-import { notFound } from '@app/middlewares/errorMiddlewares';
+import authRoutes from './routes/authRoutes';
+import { notFound } from './middlewares/errorMiddlewares';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
@@ -25,7 +19,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 
 app.use(cors({
   origin: (origin, callback) => {
-    console.log('Request Origin:', origin); // Log origin
+    console.log('Request Origin:', origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -39,18 +33,13 @@ app.use(cors({
   optionsSuccessStatus: 204
 }));
 
-
-
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use("/api/auth", authRoutes)
-app.use("/api/users", usersRoutes )
-app.use("/api/books", booksRoutes )
-app.use("/api/borrowers", borrowersRoutes )
-app.use(cookieParser())
+app.use("/api/auth", authRoutes);
 
-app.use(notFound)
+app.use(notFound);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port: ${PORT}`);

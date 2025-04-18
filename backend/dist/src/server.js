@@ -18,7 +18,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     : ['http://localhost:4200', 'http://skillmatch25.s3-website.eu-north-1.amazonaws.com'];
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
-        console.log('Request Origin:', origin); // Log origin
+        console.log('Request Origin:', origin);
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         }
@@ -33,9 +33,9 @@ app.use((0, cors_1.default)({
     optionsSuccessStatus: 204
 }));
 app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use("/api/auth", authRoutes_1.default);
+app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
+app.use("/api/auth", authRoutes_1.default);
 app.use(errorMiddlewares_1.notFound);
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port: ${PORT}`);
