@@ -31,7 +31,7 @@ export class SeekerSignupComponent implements OnInit {
       cv: ['', [Validators.pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/)]], // Optional URL
       skills: this.fb.array([]),
       password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required,]
     },
     { validators: passwordMatcher('password', 'confirmPassword') }
   );
