@@ -89,6 +89,7 @@ export class SeekerSignupComponent implements OnInit {
         )
         .subscribe({
           next: () => {
+            window.alert('Success!')
             this.router.navigate(['/seeker/seekerDash']);
             this.signupForm.reset();
           },
@@ -96,10 +97,12 @@ export class SeekerSignupComponent implements OnInit {
             console.error('Signup error:', error);
             this.errorMessage =
               error.status === 400 ? error.error.message : 'An error occurred. Please try again later.';
+              window.alert('An error occurred')
           }
         });
     } else {
       this.errorMessage = 'Please fill all required fields correctly.';
+      window.alert("Please fill all fields")
     }
   }
 }
