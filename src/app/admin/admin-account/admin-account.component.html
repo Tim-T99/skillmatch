@@ -1,0 +1,104 @@
+<div class="w-full h-full flex justify-center items-center">
+  <form
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+    class="w-full max-w-lg rounded-md bg-[#f0f0f0] flex flex-col justify-center items-center p-10 gap-4"
+  >
+    <!-- First Name -->
+    <div class="flex flex-col w-full">
+      <input
+        type="text"
+        id="firstName"
+        formControlName="firstName"
+        class="border border-[#ff4900] w-full bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]"
+        placeholder="First Name"
+      />
+      <div
+        *ngIf="loginForm.get('firstName')?.touched && loginForm.get('firstName')?.errors"
+        class="text-red-500 text-sm mt-1"
+      >
+        <span *ngIf="loginForm.get('firstName')?.errors?.['required']">First name is required.</span>
+      </div>
+    </div>
+
+    <!-- Second Name -->
+    <div class="flex flex-col w-full">
+      <input
+        type="text"
+        id="secondName"
+        formControlName="secondName"
+        class="border border-[#ff4900] w-full bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]"
+        placeholder="Second Name"
+      />
+      <div
+        *ngIf="loginForm.get('secondName')?.touched && loginForm.get('secondName')?.errors"
+        class="text-red-500 text-sm mt-1"
+      >
+        <span *ngIf="loginForm.get('secondName')?.errors?.['required']">Second name is required.</span>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="flex flex-col w-full">
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="border border-[#ff4900] w-full bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]"
+        placeholder="Email"
+      />
+      <div
+        *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors"
+        class="text-red-500 text-sm mt-1"
+      >
+        <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</span>
+        <span *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</span>
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="flex flex-col w-full">
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        class="border border-[#ff4900] w-full bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]"
+        placeholder="New Password (optional)"
+      />
+      <div
+        *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors"
+        class="text-red-500 text-sm mt-1"
+      >
+        <span *ngIf="loginForm.get('password')?.errors?.['minlength']">
+          Password must be at least 6 characters.
+        </span>
+      </div>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="flex flex-col w-full">
+      <input
+        type="password"
+        id="confirmPassword"
+        formControlName="confirmPassword"
+        class="border border-[#ff4900] w-full bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]"
+        placeholder="Confirm New Password"
+      />
+      <div
+        *ngIf="loginForm.get('confirmPassword')?.touched && loginForm.errors?.['mismatch']"
+        class="text-red-500 text-sm mt-1"
+      >
+        <span>Passwords do not match.</span>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      [disabled]="loginForm.invalid"
+      class="mt-6 bg-[#ff4900] text-[#f0f0f0] px-6 py-2 rounded-lg hover:bg-[#e04300] disabled:bg-[#ff4900] disabled:opacity-50"
+    >
+      Update
+    </button>
+  </form>
+</div>

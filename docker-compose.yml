@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=sa
+      - DB_NAME=postgres
+      - DB_PASSWORD=root2025!
+      - PORT=3000
+      - ALLOWED_ORIGINS=http://localhost:4200
+      - JWT_SECRET=eyJhbGciOiJIUzI1NiJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+      - REFRESH_TOKEN_SECRET=dXJuaTpzZWNyZXQ6cmVmcmVzaC10b2tlbjpvYXV0aDJzZXJ2ZXI6MTIzNDU2Nzg5MAVv
+
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=root2025!
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

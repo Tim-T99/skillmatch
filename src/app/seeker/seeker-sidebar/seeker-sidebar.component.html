@@ -1,0 +1,29 @@
+<nav class="flex flex-col h-full p-4">
+  <img src="./assets/skillmatch_d.svg" alt="brand" class="w-2/3 my-5">
+      <div class="flex flex-col h-full justify-between">
+        <ul class="space-y-2">
+          <li>
+            <a routerLink="/seeker/seekerDash"
+               routerLinkActive="border-1 border-[#ff4900] text-[#000d1c]"
+               [routerLinkActiveOptions]="{exact: true}"
+               class="block p-2 rounded hover:bg-[#D4C2A8]/30">Dashboard</a>
+          </li>
+          <li>
+            <a routerLink="/seeker/seekerJobs"
+               routerLinkActive="border-1 border-[#ff4900] text-[#000d1c]"
+               class="block p-2 rounded hover:bg-[#D4C2A8]/30">Jobs</a>
+          </li>
+          <li>
+            <a routerLink="/seeker/seekerAccount"
+               routerLinkActive="border-1 border-[#ff4900] text-[#000d1c]"
+               class="block p-2 rounded hover:bg-[#D4C2A8]/30">Account</a>
+          </li>
+          <li>
+            <a routerLink="/seeker/seekerChat"
+               routerLinkActive="border-1 border-[#ff4900] text-[#000d1c]"
+               class="block p-2 rounded hover:bg-[#D4C2A8]/30">A.I chat</a>
+          </li>
+        </ul>
+        <button (click)="logout()" class="primary-btn">Logout</button>
+      </div>
+    </nav>

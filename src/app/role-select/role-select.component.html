@@ -1,0 +1,19 @@
+<main class="bg-[#f0f0f0] flex w-screen h-screen m-0 p-0">
+    <div class="hidden lg:flex h-screen lg:bg-[#000d1c] p-[5rem] lg:flex-col justify-center items-center lg:w-[50%] gap-5">
+      <img src="./assets/skillmatch_l.svg" alt="brand" class="w-2/3">
+      <p class="text-[2rem] font-bold text-white">Welcome!</p>
+    </div>
+    <div class="bg-[#000d1c] w-full lg:bg-[#f0f0f0] lg:w-[50%] flex flex-col justify-center items-start p-10 xl:pl-30 gap-5 rounded-md">
+      <img src="./assets/skillmatch_l.svg" alt="brand" class="w-2/3 lg:hidden">
+      <form [formGroup]="roleForm" class="flex flex-col gap-5">
+        <div class="flex lg:gap-5">
+          <h3 class="hidden lg:flex lg:text-[#000d1c] font-bold text-2xl">Select your role:</h3>
+          <select formControlName="role" id="roles" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2.5vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c] flex justify-center items-center">
+            <option value="employer" class="p-1">Employer</option>
+            <option value="seeker" class="p-1">Job Seeker</option>
+          </select>
+        </div>
+        <button type="button" (click)="onSubmit()" class="primary-btn w-20 lg:w-40">Sign up</button>
+      </form>
+    </div>
+  </main>

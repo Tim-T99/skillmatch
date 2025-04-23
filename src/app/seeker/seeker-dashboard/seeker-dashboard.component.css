@@ -1,0 +1,40 @@
+    @media (max-width: 640px) {
+      .job-position::before {
+        content: 'Position:';
+      }
+      .job-organization::before {
+        content: 'Organization:';
+      }
+      .job-location::before {
+        content: 'Location:';
+      }
+      .job-status::before {
+        content: 'Status:';
+      }
+      .job-score::before {
+        content: 'Score:';
+      }
+      .job-actions::before {
+        content: 'Actions:';
+      }
+      .career-job-position::before {
+        content: 'Position:';
+      }
+      .career-job-organization::before {
+        content: 'Organization:';
+      }
+      .career-job-location::before {
+        content: 'Location:';
+      }
+      .career-job-status::before {
+        content: 'Status:';
+      }
+      .career-job-score::before {
+        content: 'Score:';
+      }
+      .career-job-actions::before {
+        content: 'Actions:';
+      }
+    }
+
+  

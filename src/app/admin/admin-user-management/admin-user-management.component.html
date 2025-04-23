@@ -1,0 +1,276 @@
+<div
+  class="grid grid-cols-2 lg:flex lg:flex-row items-center mt-10 gap-5 max-sm:grid-cols-1 max-sm:gap-3 max-sm:mt-6"
+>
+  <div
+    class="w-[50%] min-h-[70px] bg-[#f0f0f0] p-2 rounded-md text-[#000d1c] flex flex-col justify-center max-sm:w-full max-sm:p-3 max-sm:min-h-[60px]"
+  >
+    <h3 class="font-bold max-sm:text-base">Applications</h3>
+    <p>{{ dashboardStats.applications | number }}</p>
+  </div>
+  <div
+    class="w-[50%] min-h-[70px] bg-[#f0f0f0] p-2 rounded-md text-[#000d1c] flex flex-col justify-center max-sm:w-full max-sm:p-3 max-sm:min-h-[60px]"
+  >
+    <h3 class="font-bold max-sm:text-base">Interviews scheduled</h3>
+    <p>{{ dashboardStats.interviews | number }}</p>
+  </div>
+  <div
+    class="w-[50%] min-h-[70px] bg-[#f0f0f0] p-2 rounded-md text-[#000d1c] flex flex-col justify-center max-sm:w-full max-sm:p-3 max-sm:min-h-[60px]"
+  >
+    <h3 class="font-bold max-sm:text-base">Job openings</h3>
+    <p>{{ dashboardStats.jobOpenings | number }}</p>
+  </div>
+</div>
+
+<div class="p-4 bg-[#000d1c] min-h-screen max-sm:p-3">
+  <h2 class="text-md font-semibold text-[#f0f0f0] mb-4 max-sm:text-sm">User Management</h2>
+
+  <form
+    [formGroup]="filterForm"
+    class="flex flex-col sm:flex-row sm:space-x-4 mb-4 items-center max-sm:gap-3"
+  >
+    <div class="mb-4 sm:mb-0 max-sm:w-full">
+      <label for="roleFilter" class="text-[#f0f0f0] text-sm font-semibold mr-2 max-sm:block max-sm:mb-1"
+        >Filter by Role:</label
+      >
+      <select
+        id="roleFilter"
+        formControlName="roleFilter"
+        class="px-3 py-2 bg-[#1a2a44] text-[#f0f0f0] border border-[#f0f0f0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:w-full max-sm:p-2 max-sm:text-sm"
+      >
+        <option value="All">All</option>
+        <option value="Employer">Employer</option>
+        <option value="Seeker">Seeker</option>
+      </select>
+    </div>
+
+    <div class="flex-1 max-sm:w-full">
+      <label for="searchQuery" class="text-[#f0f0f0] text-sm font-semibold mr-2 max-sm:block max-sm:mb-1"
+        >Search by Name:</label
+      >
+      <input
+        id="searchQuery"
+        formControlName="searchQuery"
+        type="text"
+        placeholder="Enter user name..."
+        class="w-full sm:w-64 px-3 py-2 bg-[#1a2a44] text-[#f0f0f0] border border-[#f0f0f0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:w-full max-sm:p-2 max-sm:text-sm"
+      />
+    </div>
+
+    <!-- Clear Button -->
+    <button
+      (click)="clearFilters()"
+      class="px-4 py-2 bg-[#ff4900] text-[#f0f0f0] rounded-lg hover:bg-[#e04300] max-sm:w-full max-sm:py-2 max-sm:text-sm"
+    >
+      Clear
+    </button>
+  </form>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full shadow-md rounded-lg max-sm:block">
+      <thead class="max-sm:hidden">
+        <tr class="bg-[#f0f0f0] text-[#000d1c] uppercase text-sm leading-normal rounded-md">
+          <th class="py-3 px-6 text-left">Name</th>
+          <th class="py-3 px-6 text-left">Role</th>
+          <th class="py-3 px-6 text-left">Status</th>
+          <th class="py-3 px-6 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-[#f0f0f0] text-sm font-light max-sm:block">
+        <tr
+          *ngFor="let user of users"
+          class="border-b border-gray-200 hover:border-[#ff4900] max-sm:block max-sm:mb-4 max-sm:p-4 max-sm:bg-[#1a2a44] max-sm:rounded-lg"
+        >
+          <td
+            class="py-3 px-6 text-left whitespace-nowrap max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:whitespace-normal max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0] user-name"
+          >
+            {{ user.name }}
+          </td>
+          <td
+            class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0] user-role"
+          >
+            {{ user.role }}
+          </td>
+          <td
+            class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0] user-status"
+          >
+            <span
+              [ngClass]="{
+                'text-green-500': user.status === 'Active',
+                'text-red-500': user.status === 'Inactive',
+                'text-orange-500': user.status === 'Suspended'
+              }"
+            >
+              {{ user.status }}
+            </span>
+          </td>
+          <td
+            class="py-3 px-6 max-sm:text-left text-center max-sm:flex max-sm:justify-between max-sm:gap-3 max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0] user-actions"
+          >
+            <button
+              (click)="viewUser(user)"
+              class="text-blue-500 hover:text-blue-700 mr-2 max-sm:p-2"
+            >
+              <svg
+                class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                ></path>
+              </svg>
+            </button>
+            <button
+              (click)="editUser(user)"
+              class="text-yellow-500 hover:text-yellow-700 mr-2 max-sm:p-2"
+            >
+              <svg
+                class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+              </svg>
+            </button>
+            <button (click)="deleteUser(user)" class="text-red-500 hover:text-red-700 max-sm:p-2">
+              <svg
+                class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0V3a1 1 0 011-1h2a1 1 0 011 1v1m-7 3h10"
+                ></path>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    *ngIf="isModalOpen"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div
+      class="bg-[#1a2a44] rounded-lg shadow-lg p-6 w-full max-w-md max-sm:w-[95%] max-sm:p-4 max-sm:max-h-[90vh] max-sm:overflow-y-auto"
+    >
+      <h3 class="text-lg font-semibold text-[#f0f0f0] mb-4 max-sm:text-base">
+        {{ isEditMode ? 'Edit User' : 'View User' }}
+      </h3>
+      <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+        <div class="mb-4 max-sm:mb-3">
+          <label
+            class="block text-[#f0f0f0] text-sm font-bold mb-2 max-sm:mb-1"
+            for="name"
+            >Name</label
+          >
+          <input
+            id="name"
+            formControlName="name"
+            type="text"
+            class="w-full px-3 py-2 bg-[#2a3b5a] text-[#f0f0f0] border border-[#f0f0f0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:p-2 max-sm:text-sm"
+            [ngClass]="{'bg-[#2a3b5a] opacity-50': !isEditMode}"
+          />
+          <div
+            *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched"
+            class="text-red-500 text-sm mt-1 max-sm:text-xs"
+          >
+            Name is required
+          </div>
+        </div>
+
+        <div class="mb-4 max-sm:mb-3">
+          <label
+            class="block text-[#f0f0f0] text-sm font-bold mb-2 max-sm:mb-1"
+            for="role"
+            >Role</label
+          >
+          <select
+            id="role"
+            formControlName="role"
+            class="w-full px-3 py-2 bg-[#2a3b5a] text-[#f0f0f0] border border-[#f0f0f0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:p-2 max-sm:text-sm"
+            [ngClass]="{'bg-[#2a3b5a] opacity-50': !isEditMode}"
+          >
+            <option value="Employer">Employer</option>
+            <option value="Seeker">Seeker</option>
+          </select>
+          <div
+            *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched"
+            class="text-red-500 text-sm mt-1 max-sm:text-xs"
+          >
+            Role is required
+          </div>
+        </div>
+
+        <div class="mb-4 max-sm:mb-3">
+          <label
+            class="block text-[#f0f0f0] text-sm font-bold mb-2 max-sm:mb-1"
+            for="status"
+            >Status</label
+          >
+          <select
+            id="status"
+            formControlName="status"
+            class="w-full px-3 py-2 bg-[#2a3b5a] text-[#f0f0f0] border border-[#f0f0f0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:p-2 max-sm:text-sm"
+            [ngClass]="{'bg-[#2a3b5a] opacity-50': !isEditMode}"
+          >
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="Suspended">Suspended</option>
+          </select>
+          <div
+            *ngIf="userForm.get('status')?.invalid && userForm.get('status')?.touched"
+            class="text-red-500 text-sm mt-1 max-sm:text-xs"
+          >
+            Status is required
+          </div>
+        </div>
+
+        <div
+          class="flex justify-end space-x-2 max-sm:flex-col max-sm:gap-2 max-sm:space-x-0"
+        >
+          <button
+            type="button"
+            (click)="closeModal()"
+            class="px-4 py-2 bg-gray-500 text-[#f0f0f0] rounded-lg hover:bg-gray-600 max-sm:w-full max-sm:py-2 max-sm:text-sm"
+          >
+            {{ isEditMode ? 'Cancel' : 'Close' }}
+          </button>
+          <button
+            *ngIf="isEditMode"
+            type="submit"
+            [disabled]="userForm.invalid"
+            class="px-4 py-2 bg-[#ff4900] text-[#f0f0f0] rounded-lg hover:bg-[#e04300] disabled:bg-[#ff4900] disabled:opacity-50 max-sm:w-full max-sm:py-2 max-sm:text-sm"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

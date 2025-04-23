@@ -1,0 +1,55 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+
+body{
+    font-size: clamp(12px, 1.2vw, 0.5vw);
+}
+h1{
+    font-size: clamp(40px, 5vw, 10vw);
+}
+
+h2{
+    font-size: clamp(20px, 2.5vw, 5vw);
+    font-weight: bold;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: full;
+    height: 100vh;
+}
+
+.primary-btn{
+    background-color: #ff4900;
+    color: white;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.primary-btn:hover{
+    color: #D4C2A8
+}
+
+.secondary-btn{
+    border: solid 0.1rem;
+    border-color: #ff4900;
+    color: white;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.secondary-btn:hover{
+    color: #D4C2A8
+}

@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+
+<section id="hero">
+  <h1 class="text-9xl font-black text-center"><span class="text-[#ff4900]">Welcome</span> to <br>Skillmatch A.I</h1>
+  <p class="px-[2rem] lg:px-[10rem] pt-[3rem] text-center text-wrap">Where your dream job finds you<br>Powered by cutting-edge AI, we take the guesswork out of job hunting by perfectly pairing your unique skills, experience, and aspirations with opportunities that fit you best. <span class="hidden lg:block">Say goodbye to endless scrolling and generic applications. Our intelligent platform analyzes your profile and connects you with employers who value what you bring to the table.</span> </p>
+</section>
+
+<section class="p-5 flex flex-col justify-center items-center">
+  <h2 class="text-5xl font-bold"> Why Us?</h2>
+  <div class="mt-10 gap-5 flex flex-col lg:grid lg:grid-cols-3">
+    <div class="flex flex-col gap-5">
+      <p class="w-[15rem] text-center">SkillMatch harnesses AI to land you a job that fits like a glove</p>
+      <p class="w-[15rem] text-center">SkillMatch harnesses AI to connect you with talent that fits your needs perfectly.</p>
+    </div>
+    <div class="flex flex-col gap-5">
+      <p class="w-[15rem] text-center">Your ideal career starts with SkillMatch's precise, AI-driven connections.</p>
+      <p class="w-[15rem] text-center">Your ideal hires start with SkillMatch's precise, AI-driven matching.</p>
+    </div>
+    <div class="flex flex-col gap-5">
+      <p class="w-[15rem] text-center">Pick SkillMatch for a tailored job hunt powered by intelligent tech.</p>
+      <p class="w-[15rem] text-center">Choose SkillMatch for a tailored recruitment process powered by intelligent tech.</p>
+    </div>
+  </div>
+</section>
+<section class="p-10 lg:p-30 flex flex-col justify-center items-center gap-10 lg:gap-20">
+  <h2 class="text-5xl font-bold"> About Us</h2>
+  <div class="flex flex-col lg:flex-row justify-center items-center gap-10 lg:gap-30 text-center">
+    <p class="lg:w-[50%]">At SkillMatch, we're transforming the way people find work by harnessing the power of AI to create perfect matches between talent and opportunity. Our team is passionate about simplifying the job hunt, using cutting-edge technology to analyze your skills and aspirations, then connecting you with employers who need exactly what you offer. We believe your next career move shouldn't be a struggle, it should be a seamless step forward, and we're here to make that happen with precision and care.</p>
+    <img src="./assets/woman.jpg" alt="happy woman" class="w-[20rem] lg:w-[50%] rounded-full">
+  </div>
+</section>
+<section>
+  <h2>Contact Us</h2>
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="w-full px-[10vw] flex flex-col justify-center items-start gap-5">
+    <input 
+      type="text" 
+      formControlName="name"
+      placeholder="Name" 
+      class="w-[50vw] h-[8vw] lg:w-[25vw] lg:h-[2vw] bg-[#f0f0f0] text-gray-800 px-5 py-2 rounded-md">
+      <div *ngIf="contactForm.get('name')?.touched && contactForm.get('name')?.errors" class="text-red-500">
+        <span *ngIf="contactForm.get('name')?.errors?.['required']">Name is required.</span>
+      </div>
+    <input 
+      type="email" 
+      formControlName="email"
+      placeholder="Email" 
+      class="w-[50vw] h-[8vw] lg:w-[25vw] lg:h-[2vw] bg-[#f0f0f0] text-gray-800 px-5 py-2 rounded-md">
+      <div *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.errors" class="text-red-500">
+        <span *ngIf="contactForm.get('email')?.errors?.['required']">Email is required.</span>
+        <span *ngIf="contactForm.get('email')?.errors?.['email']">Invalid email format.</span>
+      </div>
+    <textarea 
+      formControlName="message"
+      placeholder="Message" 
+      class="w-[50vw] min-h-[15vw] max-h-[50vw] lg:w-[50vw] lg:min-h-[6vw] lg:max-h-[12vw] bg-[#f0f0f0] text-black px-5 py-2 rounded-md"></textarea>
+      <div *ngIf="contactForm.get('message')?.touched && contactForm.get('message')?.errors" class="text-red-500">
+        <span *ngIf="contactForm.get('message')?.errors?.['required']">Message is required.</span>
+      </div>
+    <button 
+      type="submit" 
+      class="primary-btn"
+      [disabled]="contactForm.invalid">
+      Send
+    </button>
+  </form>
+</section>
+
+<div class="p-10 lg:h-30 bg-[#00060e] flex flex-col justify-center items-center lg:gap-20">
+  <div class="gap-5 flex flex-col lg:grid lg:grid-cols-5 justify-center items-center">
+    <p class="w-[15rem] text-center">SkillMatch Headquarters 1425 Harmony Lane, Suite 300 Portland, OR 97205</p>
+    <p class="w-[15rem] text-center">SkillMatch East Coast Office 78 Crescent Avenue Burlington, VT 05401</p>
+    <p class="w-[15rem] text-center">SkillMatch Innovation Hub 3109 Starlight Drive Austin, TX 78701</p>
+    <p class="w-[15rem] text-center">Email: tech&#64;skillmatch.com</p>
+    <p class="w-[15rem] text-center">© 2025 SkillMatch. All rights reserved</p>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+/* Optional: Add custom styles if needed */
+form {
+    max-width: 500px;
+  }
+  
+  input {
+    transition: border-color 0.2s;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #ff4900;
+    box-shadow: 0 0 0 2px rgba(255, 73, 0, 0.2);
+  }

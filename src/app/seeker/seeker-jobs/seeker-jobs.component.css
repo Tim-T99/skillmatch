@@ -1,0 +1,32 @@
+  @media (max-width: 640px) {
+    .job-position::before {
+      content: 'Position:';
+    }
+    .job-organization::before {
+      content: 'Organization:';
+    }
+    .job-location::before {
+      content: 'Location:';
+    }
+    .job-status::before {
+      content: 'Status:';
+    }
+    .job-score::before {
+      content: 'Score:';
+    }
+    .job-actions::before {
+      content: 'Actions:';
+    }
+    .interview-position::before {
+      content: 'Position:';
+    }
+    .interview-organization::before {
+      content: 'Organization:';
+    }
+    .interview-date::before {
+      content: 'Date:';
+    }
+    .interview-actions::before {
+      content: 'Actions:';
+    }
+  }

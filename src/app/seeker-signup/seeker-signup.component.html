@@ -1,0 +1,131 @@
+<main class="bg-[#000d1c] flex w-screen h-screen m-0 p-0">
+    <div class="hidden lg:flex h-screen lg:bg-[#000d1c] p-[5rem] lg:flex-col overflow-scroll justify-center items-center lg:w-[50%] gap-5">
+        <img src="./assets/skillmatch_l.svg" alt="brand" class="w-2/3">
+        <p class="text-[2rem] font-bold">We're glad to have you!</p>
+    </div>
+    <div class="bg-[#000d1c] w-full h-full lg:bg-[#f0f0f0] lg:w-[50%] lg:overflow-scroll flex flex-col justify-start items-center p-0 pt-5 gap-2">
+        <div class="flex flex-col justify-center items-center w-9/10 h-full overflow-visible lg:w-full xxl:w-2/3 mt-10">
+          <img src="./assets/skillmatch_l.svg" alt="brand" class="w-2/3 lg:hidden py-5">
+        <h3 class="hidden lg:flex lg:text-[#000d1c] font-bold text-3xl pb-1">Sign up</h3>
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="bg-[#f0f0f0] rounded-md flex flex-col justify-start items-start p-5 gap-5 lg:gap-5 w-full lg:w-2/3">
+            <h3 class="lg:hidden text-[#000d1c] font-bold text-2xl">Sign up</h3>
+            <h4 class="text-[#000d1c] font-bold">Personal information</h4>
+            <!-- Names -->
+            <div class="flex flex-row w-full justify-between">
+                <div class="flex flex-col">
+                    <input type="text" id="firstName" formControlName="firstName" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="First name">
+                    <div *ngIf="signupForm.get('firstName')?.touched && signupForm.get('firstName')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('firstName')?.errors?.['required']">First name is required.</span>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" id="secondName" formControlName="secondName" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Second name">
+                    <div *ngIf="signupForm.get('secondName')?.touched && signupForm.get('secondName')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('secondName')?.errors?.['required']">Second name is required.</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Email -->
+            <div class="w-full">
+              <input type="email" id="email" formControlName="email" class="border-1 border-[#ff4900] w-full h-[8vw] lg:h-[2vw] bg-[#f0f0f0] px-5 rounded-md text-[#000d1c]" placeholder="Email">
+              <div *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.errors" class="text-red-500">
+                  <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is required.</span>
+                  <span *ngIf="signupForm.get('email')?.errors?.['email']">Invalid email format.</span>
+                  <span *ngIf="signupForm.get('email')?.errors?.['emailTaken']">Email already exists.</span>
+              </div>
+            </div>
+            <div class="flex flex-row w-full justify-between">
+                <div>
+                    <input type="text" id="telephone1" formControlName="telephone1" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Telephone 1">
+                    <div *ngIf="signupForm.get('telephone1')?.touched && signupForm.get('telephone1')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('telephone1')?.errors?.['required']">Telephone is required.</span>
+                        <span *ngIf="signupForm.get('telephone2')?.errors?.['telephone1Taken']">Telephone is already registered.</span>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" id="telephone2" formControlName="telephone2" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Telephone 2">
+                    <div *ngIf="signupForm.get('telephone2')?.touched && signupForm.get('telephone2')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('telephone2')?.errors?.['required']">Telephone is required.</span>
+                        <span *ngIf="signupForm.get('telephone2')?.errors?.['telephone2Taken']">Telephone is already registered.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-row w-full justify-between">
+                <div>
+                    <input type="text" id="address" formControlName="address" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Address">
+                    <div *ngIf="signupForm.get('address')?.touched && signupForm.get('address')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('address')?.errors?.['required']">Address is required.</span>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" id="postalCode" formControlName="postalCode" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Postal Code">
+                    <div *ngIf="signupForm.get('postalCode')?.touched && signupForm.get('postalCode')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('postalCode')?.errors?.['required']">Postal code is required.</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Education information -->
+            <h4 class="text-[#000d1c] font-bold">Education information</h4>
+            <div class="w-full">
+                <select name="edLevel" id="edLevel" formControlName="edLevel" class="border-1 border-[#ff4900] w-full h-[8vw] lg:h-[2vw] bg-[#f0f0f0] px-10 py-2 rounded-md text-[#000d1c]">
+                    <option value="Highest level" selected disabled>Highest Level</option>
+                    <option value="PhD">PhD</option>
+                    <option value="Masters">Masters</option>
+                    <option value="Undergraduate">Undergraduate</option>
+                    <option value="High School">High School</option>
+                </select>
+                <div class="text-red-500">
+                    <span *ngIf="signupForm.get('edLevel')?.errors?.['required'] && signupForm.get('edLevel')?.touched">Education level is required.</span>
+                </div>
+            </div>
+            <div class="flex flex-row w-full justify-between">
+                <div>
+                    <input type="text" id="institution" formControlName="institution" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Institution name">
+                    <div *ngIf="signupForm.get('institution')?.touched && signupForm.get('institution')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('institution')?.errors?.['required']">Institution is required.</span>
+                    </div>
+                </div>
+            </div>
+            <div formArrayName="skills">
+                <div class="flex flex-col w-full lg:grid lg:grid-cols-3">
+                    <div *ngFor="let skill of skills.controls; let i = index" class="flex gap-2 items-center justify-center w-full">
+                      <input [formControl]="skill" type="text" [id]="'skill' + i" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[8vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Skill">
+                      <button type="button" (click)="removeSkill(i)"><img src="./assets/delete.svg" alt="delete"></button>
+                      <div *ngIf="skill.touched && skill.errors" class="text-red-500">
+                        <span *ngIf="skill.errors?.['required']">Skill is required.</span>
+                      </div>
+                    </div>
+                    <button type="button" (click)="addSkill()" class="primary-btn mt-5">Add Skill</button>
+                </div>
+              </div>
+              <div class="flex flex-row w-full justify-between">
+                <div>
+                    <input type="text" id="cv" formControlName="cv" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="CV link">
+                    <div *ngIf="signupForm.get('cv')?.touched && signupForm.get('cv')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('cv')?.errors?.['required']">CV is required.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security --> 
+            <h4 class="text-[#000d1c] font-bold">Security</h4>
+            <div class="flex flex-row w-full justify-between">
+                <div>
+                    <input type="password" id="password" formControlName="password" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Password">
+                    <div *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.get('password')?.errors?.['required']">Password is required.</span>
+                        <span *ngIf="signupForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters.</span>
+                    </div>
+                </div>
+                <div>
+                    <input type="password" id="confirmPassword" formControlName="confirmPassword" class="border-1 border-[#ff4900] w-[35vw] h-[8vw] lg:w-[12vw] lg:h-[2vw] bg-[#f0f0f0] px-5 py-2 rounded-md text-[#000d1c]" placeholder="Confirm Password">
+                    <div *ngIf="signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.errors" class="text-red-500">
+                        <span *ngIf="signupForm.hasError('passwordMismatch') && signupForm.get('confirmPassword')?.touched" class="text-red-500">Passwords do not match</span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="primary-btn">Sign Up</button>
+        </form>
+        </div>
+    </div>
+  </main>

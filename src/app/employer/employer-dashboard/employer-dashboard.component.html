@@ -1,0 +1,22 @@
+<div class="bg-[#000d1c] p-6 max-sm:p-4 text-[#f0f0f0]">
+    <h2 class="text-2xl font-bold mb-5 max-sm:text-xl">Company Metrics</h2>
+    <app-employer-chart></app-employer-chart>
+  
+    <h2 class="text-2xl font-bold mt-10 mb-5 max-sm:text-xl">This Week</h2>
+    <div *ngIf="isLoading" class="text-center">Loading metrics...</div>
+    <div *ngIf="errorMessage && !isLoading" class="text-center text-red-500">{{ errorMessage }}</div>
+    <div *ngIf="!isLoading && !errorMessage" class="grid grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="min-h-[70px] bg-[#f0f0f0] p-4 rounded-md text-[#000d1c] flex flex-col justify-center">
+        <h3 class="font-bold text-lg">Applications</h3>
+        <p class="text-xl">{{ metrics.applications }}</p>
+      </div>
+      <div class="min-h-[70px] bg-[#f0f0f0] p-4 rounded-md text-[#000d1c] flex flex-col justify-center">
+        <h3 class="font-bold text-lg">Interviews Scheduled</h3>
+        <p class="text-xl">{{ metrics.interviews }}</p>
+      </div>
+      <div class="min-h-[70px] bg-[#f0f0f0] p-4 rounded-md text-[#000d1c] flex flex-col justify-center">
+        <h3 class="font-bold text-lg">Job Openings</h3>
+        <p class="text-xl">{{ metrics.jobOpenings }}</p>
+      </div>
+    </div>
+  </div>

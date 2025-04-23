@@ -1,0 +1,26 @@
+<nav class="flex flex-col h-full p-4 max-sm:p-2 justify-between">
+  <ul class="space-y-2 max-sm:space-y-1">
+    <li>
+      <a routerLink="/employer/employerDash" 
+         routerLinkActive="border border-[#ff4900] text-[#000d1c]" 
+         [routerLinkActiveOptions]="{exact: true}"
+         class="block p-2 rounded hover:bg-[#D4C2A8]/30 max-sm:p-1.5 max-sm:text-sm">Dashboard</a>
+    </li>
+    <li>
+      <a routerLink="/employer/employerJobs" 
+         routerLinkActive="border border-[#ff4900] text-[#000d1c]" 
+         class="block p-2 rounded hover:bg-[#D4C2A8]/30 max-sm:p-1.5 max-sm:text-sm">Jobs</a>
+    </li>
+    <li>
+      <a routerLink="/employer/employerAccount" 
+         routerLinkActive="border border-[#ff4900] text-[#000d1c]" 
+         class="block p-2 rounded hover:bg-[#D4C2A8]/30 max-sm:p-1.5 max-sm:text-sm">Account</a>
+    </li>
+    <li>
+      <a routerLink="/employer/employerChat" 
+         routerLinkActive="border border-[#ff4900] text-[#000d1c]" 
+         class="block p-2 rounded hover:bg-[#D4C2A8]/30 max-sm:p-1.5 max-sm:text-sm">A.I chat</a>
+    </li>
+  </ul>
+  <button (click)="logout()" class="primary-btn">Logout</button>
+</nav>

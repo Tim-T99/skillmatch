@@ -1,0 +1,249 @@
+<div class="grid grid-cols-2 lg:flex lg:flex-row items-center mb-5 gap-5 max-sm:grid-cols-1 max-sm:gap-3 max-sm:mt-6">
+  <div class="w-[50%] min-h-[70px] bg-[#f0f0f0] p-2 rounded-md text-[#000d1c] flex flex-col justify-center max-sm:w-full max-sm:p-3 max-sm:min-h-[60px]">
+    <h3 class="font-bold max-sm:text-base">Applications</h3>
+    <p>{{ stats.applications }}</p>
+  </div>
+  <div class="w-[50%] min-h-[70px] bg-[#f0f0f0] p-2 rounded-md text-[#000d1c] flex flex-col justify-center max-sm:w-full max-sm:p-3 max-sm:min-h-[60px]">
+    <h3 class="font-bold max-sm:text-base">Interviews scheduled</h3>
+    <p>{{ stats.interviews }}</p>
+  </div>
+  <div class="w-[50%] min-h-[70px] bg-[#f0f0f0] p-2 rounded-md text-[#000d1c] flex flex-col justify-center max-sm:w-full max-sm:p-3 max-sm:min-h-[60px]">
+    <h3 class="font-bold max-sm:text-base">Job openings</h3>
+    <p>{{ stats.jobOpenings }}</p>
+  </div>
+</div>
+
+<div class="flex flex-col bg-[#000d1c] py-6 max-sm:flex max-sm:flex-col max-sm:py-4">
+  <!-- Recommended Careers -->
+  <div class="w-full bg-[#f0f0f0] text-[#000d1c] rounded-md p-5 max-sm:w-full max-sm:p-4 mb-5">
+    <h3 class="text-xl font-bold mb-5 max-sm:text-lg">Recommended Careers</h3>
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
+      <div
+        *ngFor="let career of recommendedCareers"
+        class="bg-white p-5 rounded-md mb-4 max-sm:p-3 max-sm:mb-3"
+      >
+        <h4 class="text-lg font-semibold max-sm:text-base">{{ career.position }}</h4>
+        <div class="flex justify-between items-center mt-2 max-sm:flex-col max-sm:items-start max-sm:gap-2">
+          <p>Jobs Available</p>
+          <p>{{ career.jobsAvailable }}</p>
+          <button
+            (click)="openCareerModal(career)"
+            class="bg-[#ff4900] text-white px-4 py-1 rounded-md hover:bg-orange-600 max-sm:w-full max-sm:py-2 max-sm:text-sm"
+          >
+            View
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Job Applications Table -->
+  <div class="w-full pr-5 max-sm:w-full max-sm:pr-0 max-sm:mb-6">
+    <!-- Filters -->
+    <div class="flex justify-between mb-4 max-sm:flex-col max-sm:gap-3">
+      <select
+        [formControl]="filterForm.controls['statusFilter']"
+        class="bg-[#f0f0f0] text-[#000d1c] p-2 rounded-md max-sm:w-full max-sm:p-1.5 max-sm:text-sm"
+      >
+        <option value="All">All statuses</option>
+        <option value="Active">Active</option>
+        <option value="Interviewing">Interviewing</option>
+        <option value="Closed">Closed</option>
+      </select>
+      <input
+        [formControl]="filterForm.controls['searchQuery']"
+        placeholder="Search jobs..."
+        class="bg-[#f0f0f0] text-[#000d1c] p-2 rounded-md w-1/3 max-sm:w-full max-sm:p-1.5 max-sm:text-sm"
+      />
+      <button
+        (click)="clearFilters()"
+        class="bg-[#ff4900] text-white px-4 py-2 rounded-md hover:bg-orange-600 max-sm:w-full max-sm:py-2 max-sm:text-sm"
+      >
+        Clear
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-scroll">
+      <table class="min-w-full shadow-md rounded-lg max-sm:block">
+        <thead class="max-sm:hidden">
+          <tr class="bg-[#f0f0f0] text-[#000d1c] uppercase text-sm leading-normal">
+            <th class="py-3 px-6 text-left">Position</th>
+            <th class="py-3 px-6 text-left">Organization</th>
+            <th class="py-3 px-6 text-left">Location</th>
+            <th class="py-3 px-6 text-left">Status</th>
+            <th class="py-3 px-6 text-left">Score</th>
+            <th class="py-3 px-6 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-[#f0f0f0] text-sm font-light max-sm:block">
+          <tr
+            *ngFor="let job of jobs"
+            class="border-b border-gray-200 hover:border-[#ff4900] max-sm:block max-sm:mb-4 max-sm:p-4 max-sm:bg-[#1a2a44] max-sm:rounded-lg"
+          >
+            <td class="py-3 px-6 text-left whitespace-nowrap max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:whitespace-normal max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Position:'] max-sm:before:text-[#f0f0f0]">{{ job.position }}</td>
+            <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Organization:'] max-sm:before:text-[#f0f0f0]">{{ job.organization }}</td>
+            <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Location:'] max-sm:before:text-[#f0f0f0]">{{ job.location }}</td>
+            <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Status:'] max-sm:before:text-[#f0f0f0]">
+              <span
+                [ngClass]="{
+                  'text-green-500': job.status === 'Active',
+                  'text-orange-500': job.status === 'Interviewing',
+                  'text-gray-300': job.status === 'Closed'
+                }"
+              >
+                {{ job.status }}
+              </span>
+            </td>
+            <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Score:'] max-sm:before:text-[#f0f0f0]">{{ job.score.toFixed(1) }}/5</td>
+            <td class="py-3 px-6 text-center max-sm:flex max-sm:justify-center max-sm:gap-3 max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Actions:'] max-sm:before:text-[#f0f0f0]">
+              <button
+                (click)="openJobModal(job)"
+                class="text-blue-500 hover:text-blue-700 max-sm:p-2"
+              >
+                <svg
+                  class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  ></path>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Job Details Modal -->
+  <div
+    *ngIf="isJobModalOpen && selectedJob"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-[#f0f0f0] text-[#000d1c] rounded-lg p-6 w-1/2 max-sm:w-[95%] max-sm:p-4 max-sm:max-h-[90vh] max-sm:overflow-y-auto">
+      <h3 class="text-xl font-bold mb-4 max-sm:text-lg">{{ selectedJob.position }}</h3>
+      <p><strong>Organization:</strong> {{ selectedJob.organization }}</p>
+      <p><strong>Location:</strong> {{ selectedJob.location }}</p>
+      <p><strong>Status:</strong> {{ selectedJob.status }}</p>
+      <p><strong>Score:</strong> {{ selectedJob.score.toFixed(1) }}/5</p>
+      <p><strong>Description:</strong> {{ selectedJob.details.description }}</p>
+      <p><strong>Requirements:</strong></p>
+      <ul class="list-disc pl-5 mb-4 max-sm:pl-4">
+        <li *ngFor="let req of selectedJob.details.requirements">{{ req }}</li>
+      </ul>
+      <p><strong>Skills:</strong></p>
+      <ul class="list-disc pl-5 mb-4 max-sm:pl-4">
+        <li *ngFor="let skill of selectedJob.details.skills">{{ skill }}</li>
+      </ul>
+      <p><strong>Posted:</strong> {{ selectedJob.details.postedDate }}</p>
+      <!-- Success/Error Messages -->
+      <p *ngIf="applicationSuccess" class="text-green-600 font-semibold mb-4">{{ applicationSuccess }}</p>
+      <p *ngIf="applicationError" class="text-red-600 font-semibold mb-4">{{ applicationError }}</p>
+      <div class="flex gap-5 max-sm:flex-col max-sm:gap-3">
+        <button *ngIf="selectedJob.status === 'Active'"
+          (click)="applyJob(selectedJob)"
+          class="bg-[#ff4900] text-white px-4 py-2 rounded-md hover:bg-orange-600 max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+        >
+          Apply
+        </button>
+        <button
+          (click)="closeModal()"
+          class="text-[#000d1c] border border-[#ff4900] px-4 py-2 rounded-md hover:bg-[#ff4900] hover:text-white max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Career Jobs Modal -->
+  <div
+    *ngIf="isCareerModalOpen && selectedCareer"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-[#f0f0f0] text-[#000d1c] rounded-lg p-6 w-3/4 max-sm:w-[95%] max-sm:p-4 max-sm:max-h-[90vh] max-sm:overflow-y-auto">
+      <h3 class="text-xl font-bold mb-4 max-sm:text-lg">{{ selectedCareer.position }} Jobs</h3>
+      <div class="overflow-x-auto">
+        <table class="min-w-full max-sm:block">
+          <thead class="max-sm:hidden">
+            <tr class="bg-[#e0e0e0] text-[#000d1c] uppercase text-sm">
+              <th class="py-3 px-6 text-left">Position</th>
+              <th class="py-3 px-6 text-left">Organization</th>
+              <th class="py-3 px-6 text-left">Location</th>
+              <th class="py-3 px-6 text-left">Status</th>
+              <th class="py-3 px-6 text-left">Score</th>
+              <th class="py-3 px-6 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="text-[#000d1c] text-sm max-sm:block">
+            <tr
+              *ngFor="let job of selectedCareer.relatedJobs"
+              class="border-b border-gray-200 max-sm:block max-sm:mb-4 max-sm:p-4 max-sm:bg-white max-sm:rounded-lg"
+            >
+              <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Position:'] max-sm:before:text-[#000d1c]">{{ job.position }}</td>
+              <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Organization:'] max-sm:before:text-[#000d1c]">{{ job.organization }}</td>
+              <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Location:'] max-sm:before:text-[#000d1c]">{{ job.location }}</td>
+              <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Status:'] max-sm:before:text-[#000d1c]">
+                <span
+                  [ngClass]="{
+                    'text-green-500': job.status === 'Active',
+                    'text-orange-500': job.status === 'Interviewing',
+                    'text-red-500': job.status === 'Closed'
+                  }"
+                >
+                  {{ job.status }}
+                </span>
+              </td>
+              <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Score:'] max-sm:before:text-[#000d1c]">{{ job.score.toFixed(1) }}/5</td>
+              <td class="py-3 px-6 text-center max-sm:flex max-sm:justify-center max-sm:gap-3 max-sm:py-2 max-sm:px-0 max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:content-['Actions:'] max-sm:before:text-[#000d1c]">
+                <button
+                  (click)="openJobModal(job)"
+                  class="text-blue-500 hover:text-blue-700 max-sm:p-2"
+                >
+                  <svg
+                    class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    ></path>
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    ></path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button
+        (click)="closeModal()"
+        class="bg-[#ff4900] text-white px-4 py-2 rounded-md mt-4 hover:bg-orange-600 max-sm:w-full max-sm:py-2 max-sm:text-sm"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>

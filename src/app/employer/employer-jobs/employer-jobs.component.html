@@ -1,0 +1,530 @@
+<div class="min-h-screen bg-[#000d1c] p-6 max-sm:p-4">
+  <div class="flex justify-between">
+    <h3 class="text-2xl font-bold mb-5 text-[#f0f0f0] max-sm:text-xl">Posted Jobs</h3>
+    <button (click)="createJob()" class="primary-btn mb-5">Create new</button>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="text-red-500 text-sm mb-4">{{ errorMessage }}</div>
+
+  <!-- Jobs Table -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full shadow-md rounded-lg max-sm:block">
+      <thead class="max-sm:hidden">
+        <tr class="bg-[#f0f0f0] text-[#000d1c] uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left">Title</th>
+          <th class="py-3 px-6 text-left">Status</th>
+          <th class="py-3 px-6 text-left">Applicants</th>
+          <th class="py-3 px-6 text-left">Interviews Scheduled</th>
+          <th class="py-3 px-6 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-[#f0f0f0] text-sm font-light max-sm:block">
+        <tr
+          *ngFor="let job of jobs"
+          class="border-b border-gray-200 hover:border-[#ff4900] max-sm:block max-sm:mb-4 max-sm:p-4 max-sm:bg-[#1a2a44] max-sm:rounded-lg"
+        >
+          <td class="py-3 px-6 text-left whitespace-nowrap max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:whitespace-normal max-sm:before:content-['Title:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">{{ job.title }}</td>
+          <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:content-['Status:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">
+            <span
+              [ngClass]="{
+                'text-green-500': job.status === 'Active',
+                'text-orange-500': job.status === 'Interviewing',
+                'text-red-500': job.status === 'Closed'
+              }"
+            >
+              {{ job.status }}
+            </span>
+          </td>
+          <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:content-['Applicants:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">{{ job.applicants.length }}</td>
+          <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:content-['Interviews:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">{{ job.interviews.length }}</td>
+          <td class="py-3 px-6 text-center max-sm:flex max-sm:justify-center max-sm:gap-3 max-sm:py-2 max-sm:px-0 max-sm:before:content-['Actions:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">
+            <button
+              (click)="viewJob(job)"
+              class="text-[#f0f0f0] hover:text-blue-700 mr-2 max-sm:p-2"
+            >
+              <svg
+                class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                ></path>
+              </svg>
+            </button>
+            <button
+              (click)="editJob(job)"
+              class="text-[#f0f0f0] hover:text-yellow-700 mr-2 max-sm:p-2"
+            >
+              <svg
+                class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                ></path>
+              </svg>
+            </button>
+            <button
+              (click)="deleteJob(job)"
+              class="text-red-500 hover:text-red-700 max-sm:p-2"
+            >
+              <svg
+                class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5-4h4m-4 0V3a1 1 0 011-1h2a1 1 0 011 1v1m-7 3h10"
+                ></path>
+              </svg>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="jobs.length === 0 && !isLoading" class="text-[#f0f0f0] text-center">
+          <td colspan="5" class="py-4">No jobs posted yet.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="isLoading" class="text-[#f0f0f0] text-center py-4">Loading jobs...</div>
+  </div>
+
+  <!-- Scheduled Interviews Table -->
+  <h3 class="text-2xl font-bold my-5 text-[#f0f0f0] max-sm:text-xl">Scheduled Interviews</h3>
+  <div class="overflow-x-auto">
+    <table class="min-w-full shadow-md rounded-lg max-sm:block">
+      <thead class="max-sm:hidden">
+        <tr class="bg-[#f0f0f0] text-[#000d1c] uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left">Role</th>
+          <th class="py-3 px-6 text-left">Applicant</th>
+          <th class="py-3 px-6 text-left">Date</th>
+          <th class="py-3 px-6 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-[#f0f0f0] text-sm font-light max-sm:block">
+        <tr
+          *ngFor="let interview of getAllInterviews()"
+          class="border-b border-gray-200 hover:border-[#ff4900] max-sm:block max-sm:mb-4 max-sm:p-4 max-sm:bg-[#1a2a44] max-sm:rounded-lg"
+        >
+          <td class="py-3 px-6 text-left whitespace-nowrap max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:whitespace-normal max-sm:before:content-['Role:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">
+            {{ getJobById(interview.jobId)?.title }}
+          </td>
+          <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:content-['Applicant:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">
+            {{ getCandidateById(interview.candidateId, interview.jobId)?.name }}
+          </td>
+          <td class="py-3 px-6 text-left max-sm:flex max-sm:justify-between max-sm:py-2 max-sm:px-0 max-sm:before:content-['Date:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">{{ interview.date }}</td>
+          <td class="py-3 px-6 text-center max-sm:flex max-sm:justify-center max-sm:gap-3 max-sm:py-2 max-sm:px-0 max-sm:before:content-['Actions:'] max-sm:before:font-bold max-sm:before:w-2/5 max-sm:before:text-[#f0f0f0]">
+            <button
+              (click)="viewInterview(interview)"
+              class="text-blue-500 hover:text-blue-700 max-sm:p-2"
+            >
+              <svg
+                class="w-5 h-5 inline max-sm:w-6 max-sm:h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478  sneak 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                ></path>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      *ngIf="getAllInterviews().length === 0"
+      class="text-[#f0f0f0] text-center py-4"
+    >
+      No interviews scheduled.
+    </div>
+  </div>
+
+  <!-- View Job Modal -->
+  <div
+    *ngIf="isViewModalOpen && selectedJob"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-[#f0f0f0] text-[#000d1c] rounded-lg p-6 w-3/4 max-h-[80vh] overflow-y-auto max-sm:w-[95%] max-sm:p-4 max-sm:max-h-[90vh]">
+      <h3 class="text-xl font-bold mb-4 max-sm:text-lg">{{ selectedJob.title }}</h3>
+      <p><strong>Status:</strong> {{ selectedJob.status }}</p>
+      <p><strong>Description:</strong> {{ selectedJob.description }}</p>
+      <p *ngIf="selectedJob.location_type"><strong>Location Type:</strong> {{ selectedJob.location_type }}</p>
+      <div *ngIf="selectedJob.requirements?.length">
+        <strong>Requirements:</strong>
+        <ul class="list-disc pl-5">
+          <li *ngFor="let req of selectedJob.requirements">{{ req }}</li>
+        </ul>
+      </div>
+      <p *ngIf="selectedJob.skills"><strong>Skills:</strong> {{ selectedJob.skills }}</p>
+      <p><strong>Posted:</strong> {{ selectedJob.created_at.split('T')[0] }}</p>
+
+      <h4 class="text-lg font-semibold mt-6 mb-2 max-sm:text-base">Applicants</h4>
+      <div class="mb-4">
+        <div
+          *ngFor="let applicant of selectedJob.applicants"
+          class="flex justify-between items-center p-2 border-b border-gray-200 max-sm:flex-col max-sm:items-start max-sm:gap-2"
+        >
+          <div>
+            <p><strong>{{ applicant.name }}</strong></p>
+            <p>Score: {{ applicant.score.toFixed(1) }}/5</p>
+          </div>
+          <div class="flex gap-2 max-sm:w-full max-sm:justify-end">
+            <button
+              (click)="viewCandidate(applicant)"
+              class="primary-btn text-sm max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+            >
+              View Profile
+            </button>
+            <button
+              (click)="startSchedulingInterview(applicant)"
+              class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 text-sm max-sm:py-2 max-sm:px-4"
+            >
+              Schedule Interview
+            </button>
+          </div>
+        </div>
+        <div
+          *ngIf="selectedJob.applicants.length === 0"
+          class="text-center py-2"
+        >
+          No applicants yet.
+        </div>
+      </div>
+
+      <!-- Interview Scheduling Form -->
+      <div *ngIf="isSchedulingInterview && selectedCandidate">
+        <h4 class="text-lg font-semibold mb-2 max-sm:text-base">
+          Schedule Interview for {{ selectedCandidate.name }}
+        </h4>
+        <form [formGroup]="interviewForm" (ngSubmit)="scheduleInterview()">
+          <div class="mb-2 max-sm:mb-3">
+            <label class="block text-sm">Interview Date</label>
+            <input
+              type="date"
+              formControlName="date"
+              class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+              [class.border-red-500]="interviewForm.get('date')?.touched && interviewForm.get('date')?.invalid"
+            />
+            <div *ngIf="interviewForm.get('date')?.touched && interviewForm.get('date')?.invalid" class="text-red-500 text-sm mt-1">
+              Interview date is required.
+            </div>
+          </div>
+          <div class="mb-2 max-sm:mb-3">
+            <label class="block text-sm">Meeting Link</label>
+            <input
+              type="url"
+              formControlName="meetingLink"
+              placeholder="https://zoom.us/j/..."
+              class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+              [class.border-red-500]="interviewForm.get('meetingLink')?.touched && interviewForm.get('meetingLink')?.invalid"
+            />
+            <div *ngIf="interviewForm.get('meetingLink')?.touched && interviewForm.get('meetingLink')?.invalid" class="text-red-500 text-sm mt-1">
+              Valid meeting link is required.
+            </div>
+          </div>
+          <div class="flex gap-2 max-sm:flex-col max-sm:gap-3">
+            <button
+              type="submit"
+              class="primary-btn max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+              [disabled]="interviewForm.invalid"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              (click)="isSchedulingInterview = false"
+              class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="flex justify-end mt-4 max-sm:mt-3">
+        <button
+          (click)="closeModal()"
+          class="primary-btn max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Job Modal -->
+  <div
+    *ngIf="isCreateModalOpen"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-[#f0f0f0] text-[#000d1c] rounded-lg p-6 w-1/2 max-sm:w-[95%] max-sm:p-4">
+      <h3 class="text-xl font-bold mb-4 max-sm:text-lg">Create New Job</h3>
+      <form [formGroup]="jobForm" (ngSubmit)="saveNewJob()">
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Job Title</label>
+          <input
+            formControlName="title"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+            placeholder="e.g., Software Engineer"
+            [class.border-red-500]="jobForm.get('title')?.touched && jobForm.get('title')?.invalid"
+          />
+          <div *ngIf="jobForm.get('title')?.touched && jobForm.get('title')?.invalid" class="text-red-500 text-sm mt-1">
+            Job title is required and must be at least 3 characters.
+          </div>
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Status</label>
+          <select
+            formControlName="status"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+            [class.border-red-500]="jobForm.get('status')?.touched && jobForm.get('status')?.invalid"
+          >
+            <option value="Active">Active</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Closed">Closed</option>
+          </select>
+          <div *ngIf="jobForm.get('status')?.touched && jobForm.get('status')?.invalid" class="text-red-500 text-sm mt-1">
+            Status is required.
+          </div>
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Description</label>
+          <textarea
+            formControlName="description"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+            rows="4"
+            placeholder="Describe the job role and responsibilities"
+            [class.border-red-500]="jobForm.get('description')?.touched && jobForm.get('description')?.invalid"
+          ></textarea>
+          <div *ngIf="jobForm.get('description')?.touched && jobForm.get('description')?.invalid" class="text-red-500 text-sm mt-1">
+            Description is required and must be at least 10 characters.
+          </div>
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Location Type (optional)</label>
+          <select
+            formControlName="location_type"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+          >
+            <option value="">Select location type</option>
+            <option value="Remote">Remote</option>
+            <option value="On-site">On-site</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Requirements (optional, comma-separated)</label>
+          <input
+            formControlName="requirements"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+            placeholder="e.g., Bachelor's degree, 3+ years experience"
+          />
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Skills (optional, comma-separated)</label>
+          <input
+            formControlName="skills"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+            placeholder="e.g., JavaScript, Python, SQL"
+          />
+        </div>
+        <div class="flex gap-2 mt-4 max-sm:flex-col max-sm:gap-3 max-sm:mt-3">
+          <button
+            type="submit"
+            class="primary-btn max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+            [disabled]="jobForm.invalid"
+          >
+            Create
+          </button>
+          <button
+            type="button"
+            (click)="closeModal()"
+            class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Job Modal -->
+  <div
+    *ngIf="isEditModalOpen && selectedJob"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-[#f0f0f0] text-[#000d1c] rounded-lg p-6 w-1/2 max-sm:w-[95%] max-sm:p-4">
+      <h3 class="text-xl font-bold mb-4 max-sm:text-lg">Edit Job: {{ selectedJob.title }}</h3>
+      <form [formGroup]="jobForm" (ngSubmit)="saveJob()">
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Job Title</label>
+          <input
+            formControlName="title"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+            [class.border-red-500]="jobForm.get('title')?.touched && jobForm.get('title')?.invalid"
+          />
+          <div *ngIf="jobForm.get('title')?.touched && jobForm.get('title')?.invalid" class="text-red-500 text-sm mt-1">
+            Job title is required and must be at least 3 characters.
+          </div>
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Status</label>
+          <select
+            formControlName="status"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+            [class.border-red-500]="jobForm.get('status')?.touched && jobForm.get('status')?.invalid"
+          >
+            <option value="Active">Active</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Closed">Closed</option>
+          </select>
+          <div *ngIf="jobForm.get('status')?.touched && jobForm.get('status')?.invalid" class="text-red-500 text-sm mt-1">
+            Status is required.
+          </div>
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Description</label>
+          <textarea
+            formControlName="description"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+            rows="4"
+            [class.border-red-500]="jobForm.get('description')?.touched && jobForm.get('description')?.invalid"
+          ></textarea>
+          <div *ngIf="jobForm.get('description')?.touched && jobForm.get('description')?.invalid" class="text-red-500 text-sm mt-1">
+            Description is required and must be at least 10 characters.
+          </div>
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Location Type (optional)</label>
+          <select
+            formControlName="location_type"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+          >
+            <option value="">Select location type</option>
+            <option value="Remote">Remote</option>
+            <option value="On-site">On-site</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Requirements (optional, comma-separated)</label>
+          <input
+            formControlName="requirements"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+          />
+        </div>
+        <div class="mb-2 max-sm:mb-3">
+          <label class="block text-sm">Skills (optional, comma-separated)</label>
+          <input
+            formControlName="skills"
+            class="w-full bg-white p-2 rounded-md max-sm:p-1.5 max-sm:text-sm"
+          />
+        </div>
+        <div class="flex gap-2 mt-4 max-sm:flex-col max-sm:gap-3 max-sm:mt-3">
+          <button
+            type="submit"
+            class="primary-btn max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+            [disabled]="jobForm.invalid"
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            (click)="closeModal()"
+            class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Candidate Profile Modal -->
+  <div
+    *ngIf="isCandidateModalOpen && selectedCandidate"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-[#f0f0f0] text-[#000d1c] rounded-lg p-6 w-1/3 max-sm:w-[95%] max-sm:p-4">
+      <h3 class="text-xl font-bold mb-4 max-sm:text-lg">{{ selectedCandidate.name }}'s Profile</h3>
+      <p><strong>Score:</strong> {{ selectedCandidate.score.toFixed(1) }}/5</p>
+      <p><strong>Skills:</strong></p>
+      <ul class="list-disc pl-5 mb-4 max-sm:pl-4">
+        <li *ngFor="let skill of selectedCandidate.skills">{{ skill }}</li>
+      </ul>
+      <div class="flex justify-end mt-4 max-sm:mt-3">
+        <button
+          (click)="closeModal()"
+          class="primary-btn max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interview Details Modal -->
+  <div
+    *ngIf="isInterviewModalOpen && selectedInterview"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-[#f0f0f0] text-[#000d1c] rounded-lg p-6 w-1/3 max-sm:w-[95%] max-sm:p-4">
+      <h3 class="text-xl font-bold mb-4 max-sm:text-lg">Interview Details</h3>
+      <p><strong>Role:</strong> {{ getJobById(selectedInterview.jobId)?.title }}</p>
+      <p>
+        <strong>Applicant:</strong>
+        {{ getCandidateById(selectedInterview.candidateId, selectedInterview.jobId)?.name }}
+      </p>
+      <p><strong>Date:</strong> {{ selectedInterview.date }}</p>
+      <p>
+        <strong>Meeting Link:</strong>
+        <a
+          [href]="selectedInterview.meetingLink"
+          target="_blank"
+          class="text-blue-500 hover:underline"
+        >
+          {{ selectedInterview.meetingLink }}
+        </a>
+      </p>
+      <div class="flex justify-end mt-4 max-sm:mt-3">
+        <button
+          (click)="closeModal()"
+          class="primary-btn max-sm:py-2 max-sm:px-4 max-sm:text-sm"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

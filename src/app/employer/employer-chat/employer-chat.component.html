@@ -1,0 +1,50 @@
+<div class="min-h-screen bg-[#000d1c] p-6">
+    <!-- Chat Header -->
+    <h3 class="text-2xl font-bold mb-5 text-[#f0f0f0]">Employer Assistant Chat</h3>
+  
+    <!-- Chat Window -->
+    <div class="bg-[#1a2a44] rounded-lg shadow-md p-4 max-w-2xl mx-auto">
+      <!-- Message Area -->
+      <div
+        #chatContainer
+        class="h-96 overflow-y-auto mb-4 p-4 bg-[#f0f0f0] rounded-md"
+      >
+        <div
+          *ngFor="let message of messages"
+          class="mb-3 flex"
+          [ngClass]="message.isUser ? 'justify-end' : 'justify-start'"
+        >
+          <div
+            class="max-w-xs p-3 rounded-lg"
+            [ngClass]="{
+              'bg-blue-500 text-white': message.isUser,
+              'bg-gray-300 text-[#000d1c]': !message.isUser
+            }"
+          >
+            <p>{{ message.text }}</p>
+            <span class="text-xs opacity-75 block mt-1">{{ message.timestamp }}</span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Input Form -->
+      <form
+        [formGroup]="chatForm"
+        (ngSubmit)="sendMessage()"
+        class="flex gap-2"
+      >
+        <input
+          formControlName="message"
+          placeholder="Type your question..."
+          class="flex-1 bg-[#f0f0f0] text-[#000d1c] p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff4900]"
+        />
+        <button
+          type="submit"
+          class="primary-btn"
+          [disabled]="!chatForm.controls.message.value?.trim()"
+        >
+          Send
+        </button>
+      </form>
+    </div>
+  </div>

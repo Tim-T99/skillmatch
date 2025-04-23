@@ -1,0 +1,67 @@
+<div class="bg-[#000d1c] p-6 max-sm:p-4">
+  <div class="flex justify-between items-center mb-4 max-sm:flex-col max-sm:gap-4">
+    <!-- Filter Dropdown -->
+    <div>
+      <select
+        [formControl]="filterControl"
+        class="bg-[#f0f0f0] text-[#000d1c] px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:w-full"
+      >
+        <option value="Applicants">Applicants</option>
+        <option value="Jobs">Jobs</option>
+      </select>
+    </div>
+
+    <!-- Timeframe Buttons -->
+    <div class="flex space-x-2 max-sm:w-full max-sm:justify-between">
+      <button
+        (click)="timeframeControl.setValue('Daily')"
+        [ngClass]="{
+          'bg-[#ff4900] text-white': timeframeControl.value === 'Daily',
+          'bg-[#f0f0f0] text-[#000d1c]': timeframeControl.value !== 'Daily'
+        }"
+        class="px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:flex-1"
+      >
+        Daily
+      </button>
+      <button
+        (click)="timeframeControl.setValue('Weekly')"
+        [ngClass]="{
+          'bg-[#ff4900] text-white': timeframeControl.value === 'Weekly',
+          'bg-[#f0f0f0] text-[#000d1c]': timeframeControl.value !== 'Weekly'
+        }"
+        class="px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:flex-1"
+      >
+        Weekly
+      </button>
+      <button
+        (click)="timeframeControl.setValue('Monthly')"
+        [ngClass]="{
+          'bg-[#ff4900] text-white': timeframeControl.value === 'Monthly',
+          'bg-[#f0f0f0] text-[#000d1c]': timeframeControl.value !== 'Monthly'
+        }"
+        class="px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff4900] max-sm:flex-1"
+      >
+        Monthly
+      </button>
+    </div>
+  </div>
+
+  <!-- Chart Container -->
+  <div class="w-full h-96 bg-[#f0f0f0] rounded-lg p-4 shadow-md">
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="flex items-center justify-center h-full text-[#000d1c]">
+      Loading chart data...
+    </div>
+    <!-- Error Message -->
+    <div *ngIf="errorMessage && !isLoading" class="flex items-center justify-center h-full text-[#000d1c]">
+      {{ errorMessage }}
+    </div>
+    <!-- Canvas -->
+    <canvas
+      #lineChartCanvas
+      [ngClass]="{ 'hidden': isLoading || errorMessage }"
+      width="800"
+      height="400"
+    ></canvas>
+  </div>
+</div>

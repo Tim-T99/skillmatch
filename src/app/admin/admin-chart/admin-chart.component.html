@@ -1,0 +1,48 @@
+<div class="flex justify-between items-center mb-4">
+    <div class="relative">
+      <select
+        [(ngModel)]="selectedFilter"
+        (ngModelChange)="onFilterChange($event)"
+        class="bg-[#f0f0f0] text-[#000d1c] px-4 py-2 rounded-lg border border-[#000d1c] focus:outline-none focus:ring-2 focus:ring-[#ff4900] hover:bg-[#e0e0e0]"
+      >
+        <option value="All">All</option>
+        <option value="Employers">Employers</option>
+        <option value="Seeker">Seeker</option>
+      </select>
+    </div>
+    <div class="flex space-x-2">
+      <button
+        (click)="onTimeframeChange('Daily')"
+        class="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#ff4900]"
+        [ngClass]="{
+          'bg-[#ff4900] text-[#f0f0f0] border-[#ff4900] hover:bg-[#e04300]': selectedTimeframe === 'Daily',
+          'bg-[#f0f0f0] text-[#000d1c] border-[#000d1c] hover:bg-[#e0e0e0]': selectedTimeframe !== 'Daily'
+        }"
+      >
+        Daily
+      </button>
+      <button
+        (click)="onTimeframeChange('Weekly')"
+        class="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#ff4900]"
+        [ngClass]="{
+          'bg-[#ff4900] text-[#f0f0f0] border-[#ff4900] hover:bg-[#e04300]': selectedTimeframe === 'Weekly',
+          'bg-[#f0f0f0] text-[#000d1c] border-[#000d1c] hover:bg-[#e0e0e0]': selectedTimeframe !== 'Weekly'
+        }"
+      >
+        Weekly
+      </button>
+      <button
+        (click)="onTimeframeChange('Annually')"
+        class="px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#ff4900]"
+        [ngClass]="{
+          'bg-[#ff4900] text-[#f0f0f0] border-[#ff4900] hover:bg-[#e04300]': selectedTimeframe === 'Annually',
+          'bg-[#f0f0f0] text-[#000d1c] border-[#000d1c] hover:bg-[#e0e0e0]': selectedTimeframe !== 'Annually'
+        }"
+      >
+        Annually
+      </button>
+    </div>
+  </div>
+  <div class="w-full h-64 bg-[#f0f0f0] rounded-lg p-4 shadow-md">
+    <canvas #lineChartCanvas></canvas>
+  </div>

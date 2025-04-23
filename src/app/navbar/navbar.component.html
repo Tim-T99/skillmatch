@@ -1,0 +1,31 @@
+<nav class="p-4 w-full">
+  <div class="px-[3rem] flex justify-between items-center">
+    <a href="/" class="text-white text-xl font-bold">
+      <img src="./assets/logo.svg" alt="logo" class="w-[8vw] h-[8vw] md:w-[2vw] md:h-[2vw]">
+    </a>
+
+    <button 
+      class="text-white md:hidden focus:outline-none" 
+      (click)="toggleMenu()"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path 
+          stroke-linecap="round" 
+          stroke-linejoin="round" 
+          stroke-width="2" 
+          [attr.d]="isMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'"
+        ></path>
+      </svg>
+    </button>
+
+    <ul 
+      class="hidden md:flex md:space-x-6 md:px-[3rem] md:justify-center md:items-center" 
+      [ngClass]="{
+        '!flex flex-col space-y-4 absolute top-16 left-0 w-full bg-gray-800 p-4 md:!flex md:flex-row md:space-y-0 md:space-x-6 md:static md:bg-transparent': isMenuOpen
+      }"
+    >
+      <button routerLink="/login" class="secondary-btn md:mr-10 md:ml-5">Login</button>
+      <button routerLink="/role-select" class="primary-btn md:mr-10">Sign Up</button>
+    </ul>
+  </div>
+</nav>
