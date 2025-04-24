@@ -13,6 +13,7 @@ const jobsRoute_1 = __importDefault(require("./routes/jobsRoute"));
 const chartsRoutes_1 = __importDefault(require("./routes/chartsRoutes"));
 const seekerRoutes_1 = __importDefault(require("./routes/seekerRoutes"));
 const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
+const geminiroute_1 = __importDefault(require("./routes/geminiroute"));
 const errorMiddlewares_1 = require("./middlewares/errorMiddlewares");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 dotenv_1.default.config();
@@ -60,6 +61,7 @@ app.use('/api', chartsRoutes_1.default);
 app.use('/api', seekerRoutes_1.default);
 app.use('/api', adminRoutes_1.default);
 app.use('/api', usersRoute_1.default);
+app.use('/api', geminiroute_1.default);
 app.use(errorMiddlewares_1.notFound);
 app.use((err, req, res, next) => {
     console.error('Error:', err);

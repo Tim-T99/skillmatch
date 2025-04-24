@@ -8,6 +8,7 @@ import jobsRoutes from './routes/jobsRoute';
 import chartsRoutes from './routes/chartsRoutes';
 import seekerRoutes from './routes/seekerRoutes';
 import adminRoutes from './routes/adminRoutes';
+import geminiRoute from './routes/geminiroute';
 import { notFound } from './middlewares/errorMiddlewares';
 import cookieParser from 'cookie-parser';
 
@@ -60,6 +61,7 @@ app.use('/api', chartsRoutes);
 app.use('/api', seekerRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', usersRoutes)
+app.use('/api', geminiRoute)
 app.use(notFound);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
