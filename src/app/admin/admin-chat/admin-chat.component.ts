@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../services/auth.service';
-import { environment } from '../../../../environment'; 
 
 interface ChatMessage {
   text: string;
@@ -16,7 +15,7 @@ interface ChatMessage {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './admin-chat.component.html',
-  styleUrl: './admin-chat.component.css'
+  styleUrl: './admin-chat.component.css',
 })
 export class AdminChatComponent implements OnInit, AfterViewChecked {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
@@ -28,17 +27,18 @@ export class AdminChatComponent implements OnInit, AfterViewChecked {
     {
       text: 'Hello! I’m your admin assistant. Ask about users, jobs, or analytics, and I’ll query the database with Gemini!',
       isUser: false,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    },
   ];
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
+    private chatService: ChatService,
     private authService: AuthService
   ) {
     this.chatForm = this.fb.group({
-      message: new FormControl<string | null>('', { nonNullable: true })
+      message: ['', Validators.required],
     });
   }
 
@@ -48,8 +48,9 @@ export class AdminChatComponent implements OnInit, AfterViewChecked {
       this.messages.push({
         text: 'Please log in as an admin to use the chat.',
         isUser: false,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       });
+      this.chatForm.disable();
     }
   }
 
@@ -58,83 +59,46 @@ export class AdminChatComponent implements OnInit, AfterViewChecked {
   }
 
   sendMessage(): void {
-    const messageControl = this.chatForm.controls.message;
-    const text = messageControl.value?.trim();
+    if (this.chatForm.invalid || this.isLoading) return;
 
-    if (!text) return;
+    const message = this.chatForm.value.message?.trim();
+    if (!message) return;
 
     // Add admin message
     this.messages.push({
-      text,
+      text: message,
       isUser: true,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     });
 
     // Clear input
-    messageControl.reset();
+    this.chatForm.reset();
 
     // Send to Gemini via backend
-    this.handleBotResponse(text);
-  }
-
-  private handleBotResponse(userMessage: string): void {
-    if (!this.authService.isLoggedIn()) {
-      this.messages.push({
-        text: 'Error: You must be logged in to query the database.',
-        isUser: false,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
-      return;
-    }
-
-    this.http.post(`${environment.apiUrl}/gemini/query`, { prompt: userMessage }).subscribe({
-      next: (data: any) => {
-        const responseText = this.formatResponse(data);
+    this.isLoading = true;
+    this.chatService.sendQuery(message).subscribe({
+      next: (response) => {
         this.messages.push({
-          text: responseText,
+          text: response,
           isUser: false,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         });
+        this.isLoading = false;
+        this.scrollToBottom();
       },
-      error: (err) => {
-        console.error('Gemini query error:', err);
+      error: (error) => {
+        console.error('Error sending query:', error);
+        const errorMessage =
+          error.status === 401 ? 'Please log in again.' : 'Failed to process query. Try again later.';
         this.messages.push({
-          text: `Error: Failed to process query. ${err.status === 401 ? 'Please log in again.' : 'Try again later.'}`,
+          text: `Error: ${errorMessage}`,
           isUser: false,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         });
-      }
+        this.isLoading = false;
+        this.scrollToBottom();
+      },
     });
-  }
-
-  private formatResponse(data: any): string {
-    if (Array.isArray(data)) {
-      // SQL query results
-      if (data.length === 0) return 'No results found.';
-      return data.map(row => {
-        if ('first_name' in row) {
-          // User (employer/seeker) results
-          return `User: ${row.first_name} ${row.second_name} (ID: ${row.id}, Email: ${row.email}, Role: ${row.role_id === 1 ? 'Admin' : row.role_id === 2 ? 'Employer' : 'Seeker'})`;
-        } else if ('title' in row) {
-          // Job results
-          return `Job: ${row.title} (ID: ${row.id}, Status: ${row.status}, Employer ID: ${row.employer_id})`;
-        } else if ('count' in row) {
-          // Analytics results
-          return `Analytics: ${JSON.stringify(row)}`;
-        }
-        return JSON.stringify(row);
-      }).join('\n');
-    } else if (data.match) {
-      // Matching results (e.g., job/seeker matches for analytics)
-      return data.match.map((item: any) => {
-        if ('title' in item) {
-          return `Job Match: ${item.title} (ID: ${item.id}, Score: ${item.score}%)`;
-        } else {
-          return `User Match: ${item.name} (ID: ${item.id}, Score: ${item.score}%)`;
-        }
-      }).join('\n');
-    }
-    return JSON.stringify(data);
   }
 
   private scrollToBottom(): void {
