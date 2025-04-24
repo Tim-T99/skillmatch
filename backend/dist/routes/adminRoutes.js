@@ -13,7 +13,7 @@ const dashboardController_1 = require("../controllers/dashboardController");
 const router = (0, express_1.Router)();
 router.post('/admin', adminController_1.createAdmin);
 router.get('/admin/profile', protect_1.protect, adminController_1.getAdminProfile);
-router.put('/profile', protect_1.protect, adminController_1.updateAdminProfile);
+router.put('/admin/profile', protect_1.protect, adminController_1.updateAdminProfile);
 router.get('/metrics', protect_1.protect, dashboardController_1.getDashboardStats);
 router.get('/dashboard/chart', protect_1.protect, dashboardController_1.getChartData);
 router.get('/admins', protect_1.protect, (0, asyncHandler_1.default)(adminController_1.getAllAdmins));
